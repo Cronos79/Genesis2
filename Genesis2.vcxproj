@@ -51,6 +51,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -67,6 +69,8 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,8 +80,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\FunctionLib.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
+    <ClCompile Include="Source\GenException.cpp" />
+    <ClCompile Include="Source\GenLogger.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
+    <ClCompile Include="Source\Keyboard.cpp" />
     <ClCompile Include="Source\WinEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -90,8 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Source\FunctionLib.h" />
     <ClInclude Include="Source\GenApp.h" />
+    <ClInclude Include="Source\GenException.h" />
+    <ClInclude Include="Source\GenLogger.h" />
     <ClInclude Include="Source\GenWindow.h" />
+    <ClInclude Include="Source\Keyboard.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Genesis2.rc" />

@@ -25,6 +25,12 @@
     <Filter Include="Source\Header Files\Windows">
       <UniqueIdentifier>{4ec08d8b-9cd7-4053-a7a6-f91826be2620}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Source Files\Utility">
+      <UniqueIdentifier>{80f3c2b0-b5fb-40c3-b9df-ed37a866386b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Utility">
+      <UniqueIdentifier>{a87cbd49-d79f-4080-915a-cf913f6fbdf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -52,6 +58,18 @@
     <ClCompile Include="Source\GenApp.cpp">
       <Filter>Source\Source Files\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenException.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Keyboard.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FunctionLib.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenLogger.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -60,8 +78,20 @@
     <ClInclude Include="Source\GenWindow.h">
       <Filter>Source\Header Files\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GenException.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Source\Header Files</Filter>
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Keyboard.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FunctionLib.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenLogger.h">
+      <Filter>Source\Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,13 +6,16 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
+#include "FunctionLib.h"
+#include <string>
+#include <windows.h>
 
-TODO List
-	- file io
-	- xinput
-	- dx11	
-	- xaudio2
-	- ui
-	-- test ui
-	-- real ui
-	- start game code
+class GenLogger
+{
+public:
+	static void Info(std::string str);
+	static void Info(HRESULT hr, std::string str);
+	static void Error(std::string str);
+	static void Error(HRESULT hr, std::string str);
+};
+

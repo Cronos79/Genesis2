@@ -6,13 +6,10 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
+#include <string>
+class FunctionLib
+{
+public:
+	static std::wstring StringToWide(std::string str);
+};
 
-TODO List
-	- file io
-	- xinput
-	- dx11	
-	- xaudio2
-	- ui
-	-- test ui
-	-- real ui
-	- start game code

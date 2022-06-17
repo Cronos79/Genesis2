@@ -5,14 +5,10 @@
    $Creator: Matt Brock $
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
-#pragma once
+#include "FunctionLib.h"
 
-TODO List
-	- file io
-	- xinput
-	- dx11	
-	- xaudio2
-	- ui
-	-- test ui
-	-- real ui
-	- start game code
+std::wstring FunctionLib::StringToWide(std::string str)
+{
+	std::wstring wide_string(str.begin(), str.end());
+	return wide_string;
+}

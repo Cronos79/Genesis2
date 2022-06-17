@@ -7,6 +7,7 @@
    ======================================================================== */
 #include "GenApp.h"
 #include <exception>
+#include "GenLogger.h"
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {
@@ -14,17 +15,17 @@ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 	{
 		return GenApp{}.Start();
 	}
-	/*catch (const ChiliException& e)
+	catch (const GenException& e)
 	{
-		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
-	}*/
+		GenLogger::Error(e.what());
+	}
 	catch (const std::exception& e)
 	{
-		MessageBoxA(nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+		GenLogger::Error(e.what());
 	}
 	catch (...)
 	{
-		MessageBoxA(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+		GenLogger::Error("No details available");
 	}
 	return -1;
 }
