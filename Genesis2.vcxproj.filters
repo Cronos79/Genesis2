@@ -70,6 +70,9 @@
     <ClCompile Include="Source\GenLogger.cpp">
       <Filter>Source\Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Mouse.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -92,6 +95,15 @@
     </ClInclude>
     <ClInclude Include="Source\GenLogger.h">
       <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenMacros.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mouse.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenWin.h">
+      <Filter>Source\Header Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

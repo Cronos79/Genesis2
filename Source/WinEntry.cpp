@@ -8,9 +8,10 @@
 #include "GenApp.h"
 #include <exception>
 #include "GenLogger.h"
+#include "GenMacros.h"
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
-{
+{	
 	try
 	{
 		return GenApp{}.Start();

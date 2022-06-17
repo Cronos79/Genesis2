@@ -6,11 +6,12 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
-#include "windows.h"
+#include "GenWin.h"
 #include <optional>
 #include <string>
 #include "GenException.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class GenWindow
 {
@@ -60,23 +61,28 @@ public:
 	GenWindow(const GenWindow&) = delete;
 	GenWindow& operator=(const GenWindow&) = delete;
 	void SetTitle(const std::string& title);
+	void EnableCursor() noexcept;
+	void DisableCursor() noexcept;
+	bool CursorEnabled() const noexcept;
 	static std::optional<int> ProcessMessages() noexcept;
 	//Graphics& Gfx();
 private:
+	void ConfineCursor() noexcept;
+	void FreeCursor() noexcept;
+	void ShowCursor() noexcept;
+	void HideCursor() noexcept;
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 public:
 	Keyboard kbd;
-	//Mouse mouse;
+	Mouse mouse;
 private:
+	bool cursorEnabled = true;
 	int width;
 	int height;
 	HWND hWnd;
+	std::vector<BYTE> rawBuffer;
 	//std::unique_ptr<Graphics> pGfx;
 };
 
-// error exception helper macro
-#define GENWND_EXCEPT( hr ) GenWindow::HrException( __LINE__,__FILE__,(hr) )
-#define GENWND_LAST_EXCEPT() GenWindow::HrException( __LINE__,__FILE__,GetLastError() )
-#define GENWND_NOGFX_EXCEPT() GenWindow::NoGfxException( __LINE__,__FILE__ )

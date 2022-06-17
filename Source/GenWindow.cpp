@@ -8,6 +8,7 @@
 #include "GenWindow.h"
 #include "../resource.h"
 #include <sstream>
+#include "GenMacros.h"
 
 // Window Class Stuff
 GenWindow::WindowClass GenWindow::WindowClass::wndClass;
@@ -100,6 +101,25 @@ void GenWindow::SetTitle(const std::string& title)
 	}
 }
 
+void GenWindow::EnableCursor() noexcept
+{
+	cursorEnabled = true;
+	ShowCursor();
+	FreeCursor();
+}
+
+void GenWindow::DisableCursor() noexcept
+{
+	cursorEnabled = false;
+	HideCursor();
+	ConfineCursor();
+}
+
+bool GenWindow::CursorEnabled() const noexcept
+{
+	return cursorEnabled;
+}
+
 std::optional<int> GenWindow::ProcessMessages() noexcept
 {
 	MSG msg;
@@ -120,6 +140,29 @@ std::optional<int> GenWindow::ProcessMessages() noexcept
 
 	// return empty optional when not quitting app
 	return {};
+}
+
+void GenWindow::ConfineCursor() noexcept
+{
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	ClipCursor(&rect);
+}
+
+void GenWindow::FreeCursor() noexcept
+{
+	ClipCursor(nullptr);
+}
+
+void GenWindow::ShowCursor() noexcept
+{
+	while (::ShowCursor(TRUE) < 0);
+}
+
+void GenWindow::HideCursor() noexcept
+{
+	while (::ShowCursor(FALSE) >= 0);
 }
 
 LRESULT CALLBACK GenWindow::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -159,6 +202,174 @@ LRESULT GenWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+	case WM_KILLFOCUS:
+		kbd.ClearState();
+		break;
+	case WM_ACTIVATE:
+		// confine/free cursor on window to foreground/background if cursor disabled
+		if (!cursorEnabled)
+		{
+			if (wParam & WA_ACTIVE)
+			{
+				ConfineCursor();
+				HideCursor();
+			}
+			else
+			{
+				FreeCursor();
+				ShowCursor();
+			}
+		}
+		break;
+		/*********** KEYBOARD MESSAGES ***********/
+	case WM_KEYDOWN:
+		// syskey commands need to be handled to track ALT key (VK_MENU) and F10
+	case WM_SYSKEYDOWN:
+		if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled()) // filter autorepeat
+		{
+			kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
+		}
+		break;
+	case WM_KEYUP:
+	case WM_SYSKEYUP:
+		kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+		break;
+	case WM_CHAR:
+		kbd.OnChar(static_cast<unsigned char>(wParam));
+		break;
+		/*********** END KEYBOARD MESSAGES ***********/
+		/************* MOUSE MESSAGES ****************/
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		// cursorless exclusive gets first dibs
+		if (!cursorEnabled)
+		{
+			if (!mouse.IsInWindow())
+			{
+				SetCapture(hWnd);
+				mouse.OnMouseEnter();
+				HideCursor();
+			}
+			break;
+		}
+		// in client region -> log move, and log enter + capture mouse (if not previously in window)
+		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
+		{
+			mouse.OnMouseMove(pt.x, pt.y);
+			if (!mouse.IsInWindow())
+			{
+				SetCapture(hWnd);
+				mouse.OnMouseEnter();
+			}
+		}
+		// not in client -> log move / maintain capture if button down
+		else
+		{
+			if (wParam & (MK_LBUTTON | MK_RBUTTON))
+			{
+				mouse.OnMouseMove(pt.x, pt.y);
+			}
+			// button up -> release capture / log event for leaving
+			else
+			{
+				ReleaseCapture();
+				mouse.OnMouseLeave();
+			}
+		}
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		SetForegroundWindow(hWnd);
+		if (!cursorEnabled)
+		{
+			ConfineCursor();
+			HideCursor();
+		}
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftReleased(pt.x, pt.y);
+		// release mouse if outside of window
+		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		{
+			ReleaseCapture();
+			mouse.OnMouseLeave();
+		}
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightReleased(pt.x, pt.y);
+		// release mouse if outside of window
+		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		{
+			ReleaseCapture();
+			mouse.OnMouseLeave();
+		}
+		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+		mouse.OnWheelDelta(pt.x, pt.y, delta);
+		break;
+	}
+	/************** END MOUSE MESSAGES **************/
+	/************** RAW MOUSE MESSAGES **************/
+	case WM_INPUT:
+	{
+		if (!mouse.RawEnabled())
+		{
+			break;
+		}
+		UINT size;
+		// first get the size of the input data
+		if (GetRawInputData(
+			reinterpret_cast<HRAWINPUT>(lParam),
+			RID_INPUT,
+			nullptr,
+			&size,
+			sizeof(RAWINPUTHEADER)) == -1)
+		{
+			// bail msg processing if error
+			break;
+		}
+		rawBuffer.resize(size);
+		// read in the input data
+		if (GetRawInputData(
+			reinterpret_cast<HRAWINPUT>(lParam),
+			RID_INPUT,
+			rawBuffer.data(),
+			&size,
+			sizeof(RAWINPUTHEADER)) != size)
+		{
+			// bail msg processing if error
+			break;
+		}
+		// process the raw input data
+		auto& ri = reinterpret_cast<const RAWINPUT&>(*rawBuffer.data());
+		if (ri.header.dwType == RIM_TYPEMOUSE &&
+			(ri.data.mouse.lLastX != 0 || ri.data.mouse.lLastY != 0))
+		{
+			mouse.OnRawDelta(ri.data.mouse.lLastX, ri.data.mouse.lLastY);
+		}
+		break;
+	}
+	/************** END RAW MOUSE MESSAGES **************/
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
@@ -207,7 +418,7 @@ const char* GenWindow::HrException::what() const noexcept
 
 const char* GenWindow::HrException::GetType() const noexcept
 {
-	return "Chili Window Exception";
+	return "Gen Window Exception";
 }
 
 HRESULT GenWindow::HrException::GetErrorCode() const noexcept
