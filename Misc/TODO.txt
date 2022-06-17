@@ -1,0 +1,20 @@
+/* ========================================================================
+   $File: $
+   $Date: $
+   $Revision: $
+   $Creator: Matt Brock $
+   $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
+   ======================================================================== */
+#pragma once
+
+TODO List
+	- Window entry
+	- file io
+	- logger/error
+	- xinput
+	- dx11	
+	- xaudio2
+	- ui
+	-- test ui
+	-- real ui
+	- start game code
