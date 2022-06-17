@@ -19,16 +19,12 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{865f532d-3718-46a0-8b8e-240527249d6b}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\WinEntry.h">
-      <Filter>Source\Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\WinEntry.cpp">
-      <Filter>Source\Source Files</Filter>
-    </ClCompile>
+    <Filter Include="Source\Source Files\Windows">
+      <UniqueIdentifier>{f01ed034-266f-4b99-a8ce-81ed5cbc638e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Windows">
+      <UniqueIdentifier>{4ec08d8b-9cd7-4053-a7a6-f91826be2620}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -45,5 +41,37 @@
     <None Include="README.md">
       <Filter>Misc</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\WinEntry.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenWindow.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenApp.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\GenApp.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenWindow.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Genesis2.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

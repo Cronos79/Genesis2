@@ -6,8 +6,17 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
+#include "GenWindow.h"
 
-class WinEntry
+class GenApp
 {
+public:
+	GenApp();
+	// master frame / message loop
+	int Start();
+private:
+	void DoFrame();
+private:
+	GenWindow wnd;
 };
 
