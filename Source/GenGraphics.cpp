@@ -25,6 +25,9 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 	if (!InitializeDirectX(hwnd, width, height))
 		return false;
 
+	if (!InitializeShaders())
+		return false;
+
 	return true;
 }
 
@@ -102,6 +105,43 @@ bool GenGraphics::InitializeDirectX(HWND hwnd, int width, int height)
 	}
 
 	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), NULL);
+
+	return true;
+}
+
+bool GenGraphics::InitializeShaders()
+{
+	std::wstring shaderfolder = L"";
+#pragma region DetermineShaderPath
+	if (IsDebuggerPresent() == TRUE)
+	{
+#ifdef _DEBUG //Debug Mode
+#ifdef _WIN64 //x64
+		shaderfolder = L".\\x64\\Debug\\";
+#else  //x86 (Win32)
+		shaderfolder = L".\\Debug\\";
+#endif
+#else //Release Mode
+#ifdef _WIN64 //x64
+		shaderfolder = L".\\x64\\Release\\";
+#else  //x86 (Win32)
+		shaderfolder = L".\\Release\\";
+#endif
+#endif
+	}
+
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
+	};
+
+	UINT numElements = ARRAYSIZE(layout);
+
+
+	if (!vertexshader.Initialize(this->device, shaderfolder + L"VertexShader.cso", layout, numElements))
+		return false;
+
+
 
 	return true;
 }

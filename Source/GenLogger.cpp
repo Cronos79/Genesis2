@@ -41,3 +41,10 @@ void GenLogger::Error(HRESULT hr, std::string str)
 	std::wstring error_message = L"Error: " + FunctionLib::StringToWide(str) + L"\n" + error.ErrorMessage();
 	MessageBoxW(NULL, error_message.c_str(), L"Error", MB_ICONERROR);
 }
+
+void GenLogger::Error(HRESULT hr, std::wstring str)
+{
+	_com_error error(hr);
+	std::wstring error_message = L"Error: " + str + L"\n" + error.ErrorMessage();
+	MessageBoxW(NULL, error_message.c_str(), L"Error", MB_ICONERROR);
+}

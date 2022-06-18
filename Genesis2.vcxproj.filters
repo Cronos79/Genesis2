@@ -43,6 +43,9 @@
     <Filter Include="Source\Source Files\Graphics">
       <UniqueIdentifier>{a268506b-1597-4be3-8cd3-f559118acffb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Shaders">
+      <UniqueIdentifier>{8ce12f0f-c5e7-41a3-a344-007543a3be4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -97,6 +100,9 @@
     <ClCompile Include="Source\AdapterReader.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Shaders.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -141,6 +147,12 @@
     <ClInclude Include="Source\AdapterReader.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shaders.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Genesis2.rc">
@@ -151,5 +163,10 @@
     <Image Include="icon1.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\VertexShader.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
