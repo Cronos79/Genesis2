@@ -12,6 +12,8 @@
 #include "GenException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "GenGraphics.h"
+#include <memory>
 
 class GenWindow
 {
@@ -65,7 +67,7 @@ public:
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
 	static std::optional<int> ProcessMessages() noexcept;
-	//Graphics& Gfx();
+	GenGraphics& Gfx();
 private:
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;
@@ -83,6 +85,6 @@ private:
 	int height;
 	HWND hWnd;
 	std::vector<BYTE> rawBuffer;
-	//std::unique_ptr<Graphics> pGfx;
+	std::unique_ptr<GenGraphics> pGfx;
 };
 

@@ -85,7 +85,7 @@ GenWindow::GenWindow(int width, int height, const char* name)
 	// newly created windows start off as hidden
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	// create graphics object
-	//pGfx = std::make_unique<Graphics>(hWnd);
+	pGfx = std::make_unique<GenGraphics>(hWnd, width, height);
 }
 
 GenWindow::~GenWindow()
@@ -140,6 +140,15 @@ std::optional<int> GenWindow::ProcessMessages() noexcept
 
 	// return empty optional when not quitting app
 	return {};
+}
+
+GenGraphics& GenWindow::Gfx()
+{
+	if (!pGfx)
+	{
+		throw GENWND_NOGFX_EXCEPT();
+	}
+	return *pGfx;
 }
 
 void GenWindow::ConfineCursor() noexcept

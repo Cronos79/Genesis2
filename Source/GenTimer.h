@@ -6,19 +6,15 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
-#include "GenWindow.h"
-#include "Genesis.h"
+#include <chrono>
 
-class GenApp
+class GenTimer
 {
 public:
-	GenApp();
-	// master frame / message loop
-	int Start();
+	GenTimer() noexcept;
+	float Mark() noexcept;
+	float Peek() const noexcept;
 private:
-	void DoFrame();
-private:
-	GenWindow wnd;
-	Genesis* _game;
+	std::chrono::steady_clock::time_point last;
 };
 

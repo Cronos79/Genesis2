@@ -80,10 +80,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AdapterReader.cpp" />
     <ClCompile Include="Source\FunctionLib.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
+    <ClCompile Include="Source\Genesis.cpp" />
     <ClCompile Include="Source\GenException.cpp" />
+    <ClCompile Include="Source\GenGraphics.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
+    <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
     <ClCompile Include="Source\Keyboard.cpp" />
     <ClCompile Include="Source\Mouse.cpp" />
@@ -99,11 +103,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Source\AdapterReader.h" />
+    <ClInclude Include="Source\Genesis.h" />
+    <ClInclude Include="Source\GenGraphics.h" />
     <ClInclude Include="Source\GenMacros.h" />
     <ClInclude Include="Source\FunctionLib.h" />
     <ClInclude Include="Source\GenApp.h" />
     <ClInclude Include="Source\GenException.h" />
     <ClInclude Include="Source\GenLogger.h" />
+    <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
     <ClInclude Include="Source\GenWindow.h" />
     <ClInclude Include="Source\Keyboard.h" />

@@ -12,11 +12,14 @@ GenApp::GenApp()
 	:
 	wnd(800, 600, "Genesis2")
 {
-	wnd.SetTitle("Test");
+	wnd.SetTitle("Genesis");
+	wnd.kbd.DisableAutorepeat();
+	_game = new Genesis(&wnd);
 }
 
 int GenApp::Start()
 {
+	if (_game) { _game->Start(); }
 	while (true)
 	{
 		// process all messages pending, but to not block for new messages
@@ -31,5 +34,8 @@ int GenApp::Start()
 
 void GenApp::DoFrame()
 {
-
+	if (!_game) { return; }
+	_game->Update();
+	_game->UpdateSound();
+	_game->Render();
 }

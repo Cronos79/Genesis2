@@ -31,6 +31,18 @@
     <Filter Include="Source\Header Files\Utility">
       <UniqueIdentifier>{a87cbd49-d79f-4080-915a-cf913f6fbdf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Header Files\Game">
+      <UniqueIdentifier>{d63afd59-fd78-44dd-9eb9-458691d34f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game">
+      <UniqueIdentifier>{c0e2f004-aa25-4484-9294-76d3dff1a042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Graphics">
+      <UniqueIdentifier>{65512e3c-6430-4be1-9ddb-bc0a9aa7837d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Graphics">
+      <UniqueIdentifier>{a268506b-1597-4be3-8cd3-f559118acffb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -73,6 +85,18 @@
     <ClCompile Include="Source\Mouse.cpp">
       <Filter>Source\Source Files\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenTimer.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Genesis.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenGraphics.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AdapterReader.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -104,6 +128,18 @@
     </ClInclude>
     <ClInclude Include="Source\GenWin.h">
       <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenTimer.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Genesis.h">
+      <Filter>Source\Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGraphics.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AdapterReader.h">
+      <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

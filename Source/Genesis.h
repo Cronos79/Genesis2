@@ -6,19 +6,18 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
+#include "GenTimer.h"
 #include "GenWindow.h"
-#include "Genesis.h"
-
-class GenApp
+class Genesis
 {
 public:
-	GenApp();
-	// master frame / message loop
-	int Start();
+	Genesis(GenWindow* window);
+	void Start();
+	void Update();
+	void Render();
+	void UpdateSound();
 private:
-	void DoFrame();
-private:
-	GenWindow wnd;
-	Genesis* _game;
+	GenTimer* DeltaTime;
+	GenWindow* _window;
 };
 
