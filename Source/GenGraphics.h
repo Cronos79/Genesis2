@@ -33,4 +33,5 @@ private:
 	
 
 	VertexShader vertexshader;
+	PixelShader pixelshader;
 };
