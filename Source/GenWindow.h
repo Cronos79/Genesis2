@@ -6,6 +6,7 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
+#define fullwintard
 #include "GenWin.h"
 #include <optional>
 #include <string>

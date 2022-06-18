@@ -60,12 +60,16 @@ GenWindow::GenWindow(int width, int height, const char* name)
 	width(width),
 	height(height)
 {
+
+	int centerScreenX = GetSystemMetrics(SM_CXSCREEN) / 2 - this->width / 2;
+	int centerScreenY = GetSystemMetrics(SM_CYSCREEN) / 2 - this->height / 2;
+
 	// calculate window size based on desired client region size
 	RECT wr;
-	wr.left = 100;
-	wr.right = width + wr.left;
-	wr.top = 100;
-	wr.bottom = height + wr.top;
+	wr.left = centerScreenX;
+	wr.top = centerScreenY;
+	wr.right = wr.left + this->width;
+	wr.bottom = wr.top + this->height;
 	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
 	{
 		throw GENWND_LAST_EXCEPT();
@@ -74,7 +78,7 @@ GenWindow::GenWindow(int width, int height, const char* name)
 	hWnd = CreateWindowA(
 		WindowClass::GetName(), name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
+		wr.left, wr.top, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
 	// check for error
