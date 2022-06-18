@@ -12,6 +12,13 @@
 
 int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, LPSTR, int)
 {	
+	HRESULT hr = CoInitialize(NULL);
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to call CoInitialize.");
+		return -1;
+	}
+
 	try
 	{
 		return GenApp{}.Start();

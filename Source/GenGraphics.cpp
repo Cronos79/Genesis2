@@ -44,19 +44,17 @@ void GenGraphics::RenderFrame()
 	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->deviceContext->RSSetState(this->rasterizerState.Get());
 	this->deviceContext->OMSetDepthStencilState(this->depthStencilState.Get(), 0);
+	this->deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	//Red Tri
+	//Tri
+	this->deviceContext->PSSetShaderResources(0, 1, this->myTexture.GetAddressOf());
 	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	this->deviceContext->Draw(3, 0);
-
-	////Green Tri
-	//this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer2.GetAddressOf(), &stride, &offset);
-	//this->deviceContext->Draw(3, 0);
+	this->deviceContext->Draw(6, 0);
 
 	this->swapchain->Present(1, NULL);
 }
@@ -199,6 +197,23 @@ bool GenGraphics::InitializeDirectX(HWND hwnd, int width, int height)
 		return false;
 	}
 
+	//Create sampler description for sampler state
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = this->device->CreateSamplerState(&sampDesc, this->samplerState.GetAddressOf()); //Create sampler state
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to create sampler state.");
+		return false;
+	}
+
 	return true;
 }
 
@@ -226,7 +241,7 @@ bool GenGraphics::InitializeShaders()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"COLOR", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
 	};
 
 	UINT numElements = ARRAYSIZE(layout);
@@ -247,9 +262,14 @@ bool GenGraphics::InitializeScene()
 {
 	Vertex v[] =
 	{
-		Vertex(-0.5f,-0.5f,1.0f,1.0f,0.0f,0.0f), //Bottom Left Red Point
-		Vertex(0.0f,0.5f,1.0f,0.0f,1.0f,0.0f), //Top Middle Green Point
-		Vertex(0.5f,-0.5f,1.0f,0.0f,0.0f,1.0f), //Bottom Right Blue Point
+		Vertex(-0.5f,  -0.5f, 1.0f, 0.0f, 1.0f), //Bottom Left 
+		Vertex(-0.5f,   0.5f, 1.0f, 0.0f, 0.0f), //Top Left
+		Vertex(0.5f,   0.5f, 1.0f, 1.0f, 0.0f), //Top Right
+
+		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 1.0f), //Bottom Left 
+		Vertex(0.5f,   0.5f, 1.0f, 1.0f, 0.0f), //Top Right
+		Vertex(0.5f,  -0.5f, 1.0f, 1.0f, 1.0f), //Bottom Right
+
 	};
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
