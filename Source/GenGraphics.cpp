@@ -54,26 +54,9 @@ void GenGraphics::RenderFrame()
 	UINT offset = 0;
 
 	//Update Constant Buffer
-	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
-	static DirectX::XMVECTOR eyePos = DirectX::XMVectorSet(0.0f, -4.0f, -2.0f, 0.0f);
-	DirectX::XMFLOAT3 eyePosFloat3;
-	DirectX::XMStoreFloat3(&eyePosFloat3, eyePos);
-	eyePosFloat3.y += 0.01f;
-	eyePos = DirectX::XMLoadFloat3(&eyePosFloat3);
-
-	static DirectX::XMVECTOR lookAtPos = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); //Look at center of the world
-	static DirectX::XMVECTOR upVector = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); //Positive Y Axis = Up
-	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(eyePos, lookAtPos, upVector);
-	float fovDegrees = 90.0f; //90 Degree Field of View
-	float fovRadians = (fovDegrees / 360.0f) * DirectX::XM_2PI;
-	float aspectRatio = static_cast<float>(this->windowWidth) / static_cast<float>(this->windowHeight);
-	float nearZ = 0.1f;
-	float farZ = 1000.0f;
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovRadians, aspectRatio, nearZ, farZ);
-
-
-	constantBuffer.data.mat = world * viewMatrix * projectionMatrix;
-	constantBuffer.data.mat = DirectX::XMMatrixTranspose(constantBuffer.data.mat);
+	XMMATRIX world = XMMatrixIdentity();
+	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+	constantBuffer.data.mat = XMMatrixTranspose(constantBuffer.data.mat);
 
 	if (!constantBuffer.ApplyChanges())
 		return;
@@ -86,7 +69,19 @@ void GenGraphics::RenderFrame()
 
 	this->deviceContext->DrawIndexed(indicesBuffer.BufferSize(), 0, 0);
 
-	this->swapchain->Present(1, NULL);
+	// FPS
+	static int fpsCounter = 0;
+	static std::string fpsString = "FPS: 0";
+	fpsCounter += 1;
+	if (fpsTimer.Peek() * 1000 > 1000.0)
+	{
+		fpsString = "FPS: " + std::to_string(fpsCounter) + "\n";
+		fpsCounter = 0;
+		fpsTimer.Mark();
+	}
+	//OutputDebugStringA(fpsString.c_str());
+
+	this->swapchain->Present(0, NULL);
 }
 
 bool GenGraphics::InitializeDirectX(HWND hwnd)
@@ -329,6 +324,9 @@ bool GenGraphics::InitializeScene()
 		GenLogger::Error(hr, "Failed to initialize constant buffer.");
 		return false;
 	}
+
+	camera.SetPosition(0.0f, 0.0f, -2.0f);
+	camera.SetProjectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);
 
 	return true;
 }

@@ -103,6 +103,9 @@
     <ClCompile Include="Source\Shaders.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenCamera.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -163,6 +166,9 @@
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\ConstantBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenCamera.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>

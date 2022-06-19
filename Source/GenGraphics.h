@@ -16,6 +16,8 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
+#include "GenCamera.h"
+#include "GenTimer.h"
 
 class GenGraphics
 {
@@ -25,6 +27,7 @@ public:
 public:
 	bool Initialize(HWND hwnd, int width, int height);
 	void RenderFrame();
+	GenCamera camera;
 private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
@@ -54,5 +57,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> myTexture;
 
 	int windowWidth = 0;
-	int windowHeight = 0;
+	int windowHeight = 0;	
+	GenTimer fpsTimer;
 };
