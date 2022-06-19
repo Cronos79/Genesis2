@@ -206,8 +206,12 @@ LRESULT CALLBACK GenWindow::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, L
 	return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 }
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT GenWindow::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		return true;
+
 	switch (msg)
 	{
 		// we don't want the DefProc to handle this message because

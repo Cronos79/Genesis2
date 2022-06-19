@@ -34,6 +34,14 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 	if (!InitializeScene())
 		return false;
 
+	//Setup ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplDX11_Init(this->device.Get(), this->deviceContext.Get());
+	ImGui::StyleColorsDark();
+
 	return true;
 }
 
@@ -80,6 +88,19 @@ void GenGraphics::RenderFrame()
 		fpsTimer.Mark();
 	}
 	//OutputDebugStringA(fpsString.c_str());
+
+	// Start the Dear ImGui frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	//Create ImGui Test Window
+	ImGui::Begin("App info");
+	ImGui::Text(fpsString.c_str());
+	ImGui::End();
+	//Assemble Together Draw Data
+	ImGui::Render();
+	//Render Draw Data
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	this->swapchain->Present(0, NULL);
 }
