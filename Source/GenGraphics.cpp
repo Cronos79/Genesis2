@@ -48,13 +48,21 @@ void GenGraphics::RenderFrame()
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
 
-	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	//Tri
+	//Update Constant Buffer
+	constantBuffer.data.xOffset = 0.0f;
+	constantBuffer.data.yOffset = 0.5f;
+	if (!constantBuffer.ApplyChanges())
+		return;
+	this->deviceContext->VSSetConstantBuffers(0, 1, this->constantBuffer.GetAddressOf());
+
+	//Square
 	this->deviceContext->PSSetShaderResources(0, 1, this->myTexture.GetAddressOf());
-	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	this->deviceContext->Draw(6, 0);
+	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+	this->deviceContext->IASetIndexBuffer(indicesBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	this->deviceContext->DrawIndexed(indicesBuffer.BufferSize(), 0, 0);
 
 	this->swapchain->Present(1, NULL);
 }
@@ -260,35 +268,43 @@ bool GenGraphics::InitializeShaders()
 
 bool GenGraphics::InitializeScene()
 {
+	//Textured Square
 	Vertex v[] =
 	{
-		Vertex(-0.5f,  -0.5f, 1.0f, 0.0f, 1.0f), //Bottom Left 
-		Vertex(-0.5f,   0.5f, 1.0f, 0.0f, 0.0f), //Top Left
-		Vertex(0.5f,   0.5f, 1.0f, 1.0f, 0.0f), //Top Right
-
-		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 1.0f), //Bottom Left 
-		Vertex(0.5f,   0.5f, 1.0f, 1.0f, 0.0f), //Top Right
-		Vertex(0.5f,  -0.5f, 1.0f, 1.0f, 1.0f), //Bottom Right
-
+		Vertex(-0.5f,  -0.5f, 1.0f, 0.0f, 1.0f), //Bottom Left   - [0]
+		Vertex(-0.5f,   0.5f, 1.0f, 0.0f, 0.0f), //Top Left      - [1]
+		Vertex(0.5f,   0.5f, 1.0f, 1.0f, 0.0f), //Top Right     - [2]
+		Vertex(0.5f,  -0.5f, 1.0f, 1.0f, 1.0f), //Bottom Right   - [3]
 	};
 
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(v);
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = v;
-
-	HRESULT hr = this->device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->vertexBuffer.GetAddressOf());
+	//Load Vertex Data
+	HRESULT hr = this->vertexBuffer.Initialize(this->device.Get(), v, ARRAYSIZE(v));
 	if (FAILED(hr))
 	{
 		GenLogger::Error(hr, "Failed to create vertex buffer.");
+		return false;
+	}
+
+	DWORD indices[] =
+	{
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	//Load Index Data
+
+	hr = this->indicesBuffer.Initialize(this->device.Get(), indices, ARRAYSIZE(indices));
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to create indices buffer.");
+		return hr;
+	}
+
+	//Initialize Constant Buffer(s)
+	hr = this->constantBuffer.Initialize(this->device.Get(), this->deviceContext.Get());
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to initialize constant buffer.");
 		return false;
 	}
 

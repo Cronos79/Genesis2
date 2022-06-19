@@ -153,6 +153,18 @@
     <ClInclude Include="Source\Shaders.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\VertexBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IndexBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ConstantBufferTypes.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ConstantBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Genesis2.rc">
