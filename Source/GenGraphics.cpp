@@ -55,6 +55,7 @@ void GenGraphics::RenderFrame()
 	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->deviceContext->RSSetState(this->rasterizerState.Get());
 	this->deviceContext->OMSetDepthStencilState(this->depthStencilState.Get(), 0);
+	this->deviceContext->OMSetBlendState(this->blendState.Get(), NULL, 0xFFFFFFFF);
 	this->deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
@@ -63,18 +64,25 @@ void GenGraphics::RenderFrame()
 
 	//Update Constant Buffer
 	XMMATRIX world = XMMatrixIdentity();
-	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
-	constantBuffer.data.mat = XMMatrixTranspose(constantBuffer.data.mat);
+	cb_vs_vertexshader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+	cb_vs_vertexshader.data.mat = XMMatrixTranspose(cb_vs_vertexshader.data.mat);
 
-	if (!constantBuffer.ApplyChanges())
+	if (!cb_vs_vertexshader.ApplyChanges())
 		return;
-	this->deviceContext->VSSetConstantBuffers(0, 1, this->constantBuffer.GetAddressOf());
+	this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader.GetAddressOf());
+
+	static float alpha = 0.1f;
+	this->cb_ps_pixelshader.data.alpha = alpha;
+	this->cb_ps_pixelshader.ApplyChanges();
+	this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_pixelshader.GetAddressOf());
 
 	//Square
-	this->deviceContext->PSSetShaderResources(0, 1, this->myTexture.GetAddressOf());
+	//this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
 	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
 	this->deviceContext->IASetIndexBuffer(indicesBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
+	this->deviceContext->RSSetState(this->rasterizerState_CullFront.Get());
+	this->deviceContext->DrawIndexed(indicesBuffer.BufferSize(), 0, 0);
+	this->deviceContext->RSSetState(this->rasterizerState.Get());
 	this->deviceContext->DrawIndexed(indicesBuffer.BufferSize(), 0, 0);
 
 	// FPS
@@ -96,6 +104,7 @@ void GenGraphics::RenderFrame()
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
 	ImGui::Text(fpsString.c_str());
+	ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::End();
 	//Assemble Together Draw Data
 	ImGui::Render();
@@ -243,6 +252,44 @@ bool GenGraphics::InitializeDirectX(HWND hwnd)
 		return false;
 	}
 
+	//Create Rasterizer State for culling front
+	D3D11_RASTERIZER_DESC rasterizerDesc_CullFront;
+	ZeroMemory(&rasterizerDesc_CullFront, sizeof(D3D11_RASTERIZER_DESC));
+
+	rasterizerDesc_CullFront.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	rasterizerDesc_CullFront.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+	hr = this->device->CreateRasterizerState(&rasterizerDesc_CullFront, this->rasterizerState_CullFront.GetAddressOf());
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to create rasterizer state.");
+		return false;
+	}
+
+	//Create Blend State
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(blendDesc));
+
+	D3D11_RENDER_TARGET_BLEND_DESC rtbd;
+	ZeroMemory(&rtbd, sizeof(rtbd));
+
+	rtbd.BlendEnable = true;
+	rtbd.SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
+	rtbd.DestBlend = D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA;
+	rtbd.BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	rtbd.SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_ONE;
+	rtbd.DestBlendAlpha = D3D11_BLEND::D3D11_BLEND_ZERO;
+	rtbd.BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	rtbd.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE::D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	blendDesc.RenderTarget[0] = rtbd;
+
+	hr = this->device->CreateBlendState(&blendDesc, this->blendState.GetAddressOf());
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to create blend state.");
+		return false;
+	}
+
 	//Create sampler description for sampler state
 	D3D11_SAMPLER_DESC sampDesc;
 	ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -309,10 +356,14 @@ bool GenGraphics::InitializeScene()
 	//Textured Square
 	Vertex v[] =
 	{
-		Vertex(-0.5f,  -0.5f, 0.0f, 0.0f, 1.0f), //Bottom Left   - [0]
-		Vertex(-0.5f,   0.5f, 0.0f, 0.0f, 0.0f), //Top Left      - [1]
-		Vertex(0.5f,   0.5f, 0.0f, 1.0f, 0.0f), //Top Right     - [2]
-		Vertex(0.5f,  -0.5f, 0.0f, 1.0f, 1.0f), //Bottom Right   - [3]
+		Vertex(-0.5f,  -0.5f, -0.5f, 0.0f, 1.0f), //FRONT Bottom Left   - [0]
+		Vertex(-0.5f,   0.5f, -0.5f, 0.0f, 0.0f), //FRONT Top Left      - [1]
+		Vertex(0.5f,   0.5f, -0.5f, 1.0f, 0.0f), //FRONT Top Right     - [2]
+		Vertex(0.5f,  -0.5f, -0.5f, 1.0f, 1.0f), //FRONT Bottom Right   - [3]
+		Vertex(-0.5f,  -0.5f, 0.5f, 0.0f, 1.0f), //BACK Bottom Left   - [4]
+		Vertex(-0.5f,   0.5f, 0.5f, 0.0f, 0.0f), //BACK Top Left      - [5]
+		Vertex(0.5f,   0.5f, 0.5f, 1.0f, 0.0f), //BACK Top Right     - [6]
+		Vertex(0.5f,  -0.5f, 0.5f, 1.0f, 1.0f), //BACK Bottom Right   - [7]
 	};
 
 	//Load Vertex Data
@@ -325,8 +376,18 @@ bool GenGraphics::InitializeScene()
 
 	DWORD indices[] =
 	{
-		0, 1, 2,
-		0, 2, 3
+		0, 1, 2, //FRONT
+		0, 2, 3, //FRONT
+		4, 7, 6, //BACK 
+		4, 6, 5, //BACK
+		3, 2, 6, //RIGHT SIDE
+		3, 6, 7, //RIGHT SIDE
+		4, 5, 1, //LEFT SIDE
+		4, 1, 0, //LEFT SIDE
+		1, 5, 6, //TOP
+		1, 6, 2, //TOP
+		0, 3, 7, //BOTTOM
+		0, 7, 4, //BOTTOM
 	};
 
 	//Load Index Data
@@ -339,7 +400,14 @@ bool GenGraphics::InitializeScene()
 	}
 
 	//Initialize Constant Buffer(s)
-	hr = this->constantBuffer.Initialize(this->device.Get(), this->deviceContext.Get());
+	hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
+	if (FAILED(hr))
+	{
+		GenLogger::Error(hr, "Failed to initialize constant buffer.");
+		return false;
+	}
+
+	hr = this->cb_ps_pixelshader.Initialize(this->device.Get(), this->deviceContext.Get());
 	if (FAILED(hr))
 	{
 		GenLogger::Error(hr, "Failed to initialize constant buffer.");
