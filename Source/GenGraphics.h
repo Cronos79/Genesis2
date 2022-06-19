@@ -21,6 +21,7 @@
 #include "ImGUI\\imgui.h"
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
+#include "GenModel.h"
 
 class GenGraphics
 {
@@ -36,6 +37,8 @@ private:
 	bool InitializeShaders();
 	bool InitializeScene();
 
+	GenModel model;
+
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapchain;
@@ -46,8 +49,6 @@ private:
 	VertexShader vertexshader;
 	PixelShader pixelshader;
 
-	VertexBuffer<Vertex> vertexBuffer;
-	IndexBuffer indicesBuffer;
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 	ConstantBuffer<CB_PS_pixelshader> cb_ps_pixelshader;
 

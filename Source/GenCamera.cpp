@@ -59,6 +59,13 @@ void GenCamera::SetPosition(float x, float y, float z)
 	this->UpdateViewMatrix();
 }
 
+void GenCamera::SetPosition(const XMFLOAT3& pos)
+{
+	this->pos = pos;
+	this->posVector = XMLoadFloat3(&this->pos);
+	this->UpdateViewMatrix();
+}
+
 void GenCamera::AdjustPosition(const XMVECTOR& pos)
 {
 	this->posVector += pos;
@@ -71,6 +78,15 @@ void GenCamera::AdjustPosition(float x, float y, float z)
 	this->pos.x += x;
 	this->pos.y += y;
 	this->pos.z += z;
+	this->posVector = XMLoadFloat3(&this->pos);
+	this->UpdateViewMatrix();
+}
+
+void GenCamera::AdjustPosition(const XMFLOAT3& pos)
+{
+	this->pos.x += pos.y;
+	this->pos.y += pos.y;
+	this->pos.z += pos.z;
 	this->posVector = XMLoadFloat3(&this->pos);
 	this->UpdateViewMatrix();
 }
@@ -89,6 +105,13 @@ void GenCamera::SetRotation(float x, float y, float z)
 	this->UpdateViewMatrix();
 }
 
+void GenCamera::SetRotation(const XMFLOAT3& rot)
+{
+	this->rot = rot;
+	this->rotVector = XMLoadFloat3(&this->rot);
+	this->UpdateViewMatrix();
+}
+
 void GenCamera::AdjustRotation(const XMVECTOR& rot)
 {
 	this->rotVector += rot;
@@ -101,6 +124,15 @@ void GenCamera::AdjustRotation(float x, float y, float z)
 	this->rot.x += x;
 	this->rot.y += y;
 	this->rot.z += z;
+	this->rotVector = XMLoadFloat3(&this->rot);
+	this->UpdateViewMatrix();
+}
+
+void GenCamera::AdjustRotation(const XMFLOAT3& rot)
+{
+	this->rot.x += rot.x;
+	this->rot.y += rot.y;
+	this->rot.z += rot.z;
 	this->rotVector = XMLoadFloat3(&this->rot);
 	this->UpdateViewMatrix();
 }

@@ -48,3 +48,9 @@ void GenLogger::Error(HRESULT hr, std::wstring str)
 	std::wstring error_message = L"Error: " + str + L"\n" + error.ErrorMessage();
 	MessageBoxW(NULL, error_message.c_str(), L"Error", MB_ICONERROR);
 }
+
+void GenLogger::Error(GenException e)
+{
+	std::wstring error_message = FunctionLib::StringToWide(e.what());
+	MessageBoxW(NULL, error_message.c_str(), L"Error", MB_ICONERROR);
+}

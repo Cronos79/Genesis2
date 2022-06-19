@@ -29,12 +29,15 @@ public:
 	{
 	public:
 		HrException(int line, const char* file, HRESULT hr) noexcept;
+		HrException(int line, const char* file, HRESULT hr, const char* msg) noexcept;
 		const char* what() const noexcept override;
 		const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
+		const char* GetMsg() const noexcept;
 		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT hr;
+		const char* msg;
 	};
 	class NoGfxException : public Exception
 	{

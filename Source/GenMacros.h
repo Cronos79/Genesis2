@@ -11,3 +11,4 @@
 #define GENWND_EXCEPT( hr ) GenWindow::HrException( __LINE__,__FILE__,(hr) )
 #define GENWND_LAST_EXCEPT() GenWindow::HrException( __LINE__,__FILE__,GetLastError() )
 #define GENWND_NOGFX_EXCEPT() GenWindow::NoGfxException( __LINE__,__FILE__ )
+#define GENWND_ERROR_IF_FAILED( hr, msg ) if( FAILED( hr ) ) throw GenWindow::HrException( __LINE__,__FILE__,(hr) )

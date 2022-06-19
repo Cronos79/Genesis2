@@ -9,6 +9,7 @@
 #include "FunctionLib.h"
 #include <string>
 #include <windows.h>
+#include "GenException.h"
 
 class GenLogger
 {
@@ -18,5 +19,6 @@ public:
 	static void Error(std::string str);
 	static void Error(HRESULT hr, std::string str);
 	static void Error(HRESULT hr, std::wstring str);
+	static void Error(GenException e);
 };
 

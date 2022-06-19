@@ -130,6 +130,9 @@
     <ClCompile Include="Source\imgui\imgui.cpp">
       <Filter>Source\Source Files\Graphics\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenModel.cpp">
+      <Filter>Source\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -218,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="Source\imgui\imstb_truetype.h">
       <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenModel.h">
+      <Filter>Source\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

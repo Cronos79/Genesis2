@@ -421,10 +421,20 @@ GenWindow::HrException::HrException(int line, const char* file, HRESULT hr) noex
 	hr(hr)
 {}
 
+GenWindow::HrException::HrException(int line, const char* file, HRESULT hr, const char* msg) noexcept
+	:
+	Exception(line, file),
+	hr(hr),
+	msg(msg)
+{
+	//GenLogger::Error(hr, msg);
+}
+
 const char* GenWindow::HrException::what() const noexcept
 {
 	std::ostringstream oss;
 	oss << GetType() << std::endl
+		<< "[Message] " << GetMsg() << std::endl
 		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
 		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
 		<< "[Description] " << GetErrorDescription() << std::endl
@@ -441,6 +451,11 @@ const char* GenWindow::HrException::GetType() const noexcept
 HRESULT GenWindow::HrException::GetErrorCode() const noexcept
 {
 	return hr;
+}
+
+const char* GenWindow::HrException::GetMsg() const noexcept
+{
+	return msg;
 }
 
 std::string GenWindow::HrException::GetErrorDescription() const noexcept
