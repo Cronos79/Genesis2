@@ -16,3 +16,9 @@ TODO List
 	-- test ui
 	-- real ui
 	- start game code
+
+
+d3d11.lib
+DXGI.lib
+d3d11.lib
+d3dcompiler.lib
