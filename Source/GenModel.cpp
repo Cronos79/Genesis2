@@ -22,7 +22,7 @@ bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3
 	}
 	catch (GenException& exception)
 	{
-		//ErrorLogger::Log(exception);
+		GenLogger::Error(exception);
 		return false;
 	}
 

@@ -8,6 +8,7 @@
 #pragma once
 #include <exception>
 #include <string>
+#include <windows.h>
 
 class GenException : public std::exception
 {
@@ -23,5 +24,31 @@ private:
 	std::string file;
 protected:
 	mutable std::string whatBuffer;
-};
 
+};
+class Exception : public GenException
+{
+	using GenException::GenException;
+public:
+	static std::string TranslateErrorCode(HRESULT hr) noexcept;
+};
+class HrException : public Exception
+{
+public:
+	HrException(int line, const char* file, HRESULT hr) noexcept;
+	HrException(int line, const char* file, HRESULT hr, const char* msg) noexcept;
+	const char* what() const noexcept override;
+	const char* GetType() const noexcept override;
+	HRESULT GetErrorCode() const noexcept;
+	const char* GetMsg() const noexcept;
+	std::string GetErrorDescription() const noexcept;
+private:
+	HRESULT hr;
+	const char* msg;
+};
+class NoGfxException : public Exception
+{
+public:
+	using Exception::Exception;
+	const char* GetType() const noexcept override;
+};

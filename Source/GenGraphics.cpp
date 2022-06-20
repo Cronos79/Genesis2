@@ -80,18 +80,18 @@ void GenGraphics::RenderFrame()
 	//OutputDebugStringA(fpsString.c_str());
 
 	// Start the Dear ImGui frame
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-	//Create ImGui Test Window
-	ImGui::Begin("App info");
-	ImGui::Text(fpsString.c_str());
-	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
-	ImGui::End();
-	//Assemble Together Draw Data
-	ImGui::Render();
-	//Render Draw Data
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	//ImGui_ImplDX11_NewFrame();
+	//ImGui_ImplWin32_NewFrame();
+	//ImGui::NewFrame();
+	////Create ImGui Test Window
+	//ImGui::Begin("App info");
+	//ImGui::Text(fpsString.c_str());
+	////ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
+	//ImGui::End();
+	////Assemble Together Draw Data
+	//ImGui::Render();
+	////Render Draw Data
+	//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	this->swapchain->Present(0, NULL);
 }
@@ -344,10 +344,10 @@ bool GenGraphics::InitializeScene()
 		hr = this->cb_ps_pixelshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
 		// #TODO: Fix me 
-		if (!model.Initialize("Data\\Objects\\Nanosuit\\Nanosuit.obj", this->device.Get(), this->deviceContext.Get(), NULL, this->cb_vs_vertexshader))
+		if (!model.Initialize(".\\Data\\Cube.obj", this->device.Get(), this->deviceContext.Get(), NULL, this->cb_vs_vertexshader))
 			return false;
 
-		camera.SetPosition(0.0f, 0.0f, -2.0f);
+		camera.SetPosition(0.0f, 0.0f, -200.0f);
 		camera.SetProjectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);
 	}
 	catch (GenException& exception)
