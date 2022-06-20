@@ -33,12 +33,18 @@ void Genesis::Update()
 		aDown = false;
 	}
 
+	const float cameraSpeed = 0.006f;	
+
 	if (_window->mouse.RightIsPressed())
 	{
-		_window->Gfx().camera.AdjustRotation((float)_window->mouse.GetPosY() * 0.001f, (float)_window->mouse.GetPosX() * 0.001f, 0); // #TODO: Mouse is all over the place
-	}
-
-	const float cameraSpeed = 0.006f;
+		float mposX = (float)_window->mouse.GetPosX() - 400.0f;
+		float mposY = (float)_window->mouse.GetPosY() - 300.0f;
+		float x = 0.0f;
+		float y = 0.0f;
+		x = -(float)(mposX * cameraSpeed * dt) / 8.0f;
+		y = -(float)(mposY * cameraSpeed * dt) / 8.0f;
+		_window->Gfx().camera.AdjustRotation(y * 0.01f, x * 0.01f, 0); // #TODO: Mouse is all over the place		
+	}	
 
 	if (_window->kbd.KeyIsPressed('W'))
 	{

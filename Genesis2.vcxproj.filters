@@ -131,7 +131,10 @@
       <Filter>Source\Source Files\Graphics\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenModel.cpp">
-      <Filter>Source\Source Files</Filter>
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenMesh.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,8 +225,11 @@
     <ClInclude Include="Source\imgui\imstb_truetype.h">
       <Filter>Source\Header Files\Graphics\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GenMesh.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Source\GenModel.h">
-      <Filter>Source\Header Files</Filter>
+      <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

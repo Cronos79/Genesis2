@@ -98,6 +98,7 @@
     <ClCompile Include="Source\GenException.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
+    <ClCompile Include="Source\GenMesh.cpp" />
     <ClCompile Include="Source\GenModel.cpp" />
     <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Source\GenApp.h" />
     <ClInclude Include="Source\GenException.h" />
     <ClInclude Include="Source\GenLogger.h" />
+    <ClInclude Include="Source\GenMesh.h" />
     <ClInclude Include="Source\GenModel.h" />
     <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
