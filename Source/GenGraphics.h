@@ -21,7 +21,7 @@
 #include "ImGUI\\imgui.h"
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
-#include "GameObject.h"
+#include "GenGameObject.h"
 
 class GenGraphics
 {
@@ -32,7 +32,7 @@ public:
 	bool Initialize(HWND hwnd, int width, int height);
 	void RenderFrame();
 	GenCamera camera;
-	GameObject gameObject;
+	GenGameObject gameObject;
 private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
@@ -49,7 +49,7 @@ private:
 	PixelShader pixelshader;
 
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
-	ConstantBuffer<CB_PS_pixelshader> cb_ps_pixelshader;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;

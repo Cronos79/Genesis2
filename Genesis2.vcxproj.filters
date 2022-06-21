@@ -146,6 +146,9 @@
     <ClCompile Include="Source\GenTexture.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenGameObject.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -249,6 +252,9 @@
     </ClInclude>
     <ClInclude Include="Source\GenTexture.h">
       <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGameObject.h">
+      <Filter>Source\Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

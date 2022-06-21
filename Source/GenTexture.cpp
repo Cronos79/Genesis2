@@ -44,6 +44,13 @@ GenTexture::GenTexture(ID3D11Device* device, const std::string& filePath, aiText
 	}
 }
 
+GenTexture::GenTexture(ID3D11Device* device, const uint8_t* pData, size_t size, aiTextureType type)
+{
+	this->type = type;
+	HRESULT hr = DirectX::CreateWICTextureFromMemory(device, pData, size, this->texture.GetAddressOf(), this->textureView.GetAddressOf());
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create Texture from memory.");
+}
+
 aiTextureType GenTexture::GetType()
 {
 	return this->type;

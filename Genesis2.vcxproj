@@ -98,6 +98,7 @@
     <ClCompile Include="Source\GenColor.cpp" />
     <ClCompile Include="Source\Genesis.cpp" />
     <ClCompile Include="Source\GenException.cpp" />
+    <ClCompile Include="Source\GenGameObject.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
     <ClCompile Include="Source\GenMesh.cpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Source\GenCamera.h" />
     <ClInclude Include="Source\GenColor.h" />
     <ClInclude Include="Source\Genesis.h" />
+    <ClInclude Include="Source\GenGameObject.h" />
     <ClInclude Include="Source\GenGraphics.h" />
     <ClInclude Include="Source\GenMacros.h" />
     <ClInclude Include="Source\FunctionLib.h" />

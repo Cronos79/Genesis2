@@ -48,6 +48,9 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 
 void GenGraphics::RenderFrame()
 {
+	this->cb_ps_light.ApplyChanges();
+	this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_light.GetAddressOf());
+
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), bgcolor);
 	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -86,6 +89,8 @@ void GenGraphics::RenderFrame()
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
 	ImGui::Text(fpsString.c_str());
+	ImGui::DragFloat3("Ambient Light Color", &this->cb_ps_light.data.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Light Strength", &this->cb_ps_light.data.ambientLightStrength, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::End();
 	//Assemble Together Draw Data
@@ -341,8 +346,11 @@ bool GenGraphics::InitializeScene()
 		HRESULT hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
 
-		hr = this->cb_ps_pixelshader.Initialize(this->device.Get(), this->deviceContext.Get());
+		hr = this->cb_ps_light.Initialize(this->device.Get(), this->deviceContext.Get());
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
+
+		this->cb_ps_light.data.ambientLightColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
+		this->cb_ps_light.data.ambientLightStrength = 1.0f;
 		
 		if (!gameObject.Initialize(".\\Data\\Cube.fbx", this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
 			return false;
