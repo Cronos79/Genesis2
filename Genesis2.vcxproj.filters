@@ -136,6 +136,9 @@
     <ClCompile Include="Source\GenMesh.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameObject.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -230,6 +233,9 @@
     </ClInclude>
     <ClInclude Include="Source\GenModel.h">
       <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject.h">
+      <Filter>Source\Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

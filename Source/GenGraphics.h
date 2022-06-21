@@ -21,7 +21,7 @@
 #include "ImGUI\\imgui.h"
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
-#include "GenModel.h"
+#include "GameObject.h"
 
 class GenGraphics
 {
@@ -37,7 +37,7 @@ private:
 	bool InitializeShaders();
 	bool InitializeScene();
 
-	GenModel model;
+	GameObject gameObject;
 
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;

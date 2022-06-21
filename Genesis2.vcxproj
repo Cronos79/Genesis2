@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="Source\AdapterReader.cpp" />
     <ClCompile Include="Source\FunctionLib.cpp" />
+    <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
     <ClCompile Include="Source\Genesis.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Source\AdapterReader.h" />
     <ClInclude Include="Source\ConstantBuffer.h" />
     <ClInclude Include="Source\ConstantBufferTypes.h" />
+    <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\GenCamera.h" />
     <ClInclude Include="Source\Genesis.h" />
     <ClInclude Include="Source\GenGraphics.h" />

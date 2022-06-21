@@ -64,7 +64,7 @@ void GenGraphics::RenderFrame()
 	UINT offset = 0;
 
 	{
-		this->model.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
+		this->gameObject.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
 	}
 
 	// FPS
@@ -343,8 +343,8 @@ bool GenGraphics::InitializeScene()
 
 		hr = this->cb_ps_pixelshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-		// #TODO: Fix me 
-		if (!model.Initialize(".\\Data\\Cube.obj", this->device.Get(), this->deviceContext.Get(), NULL, this->cb_vs_vertexshader))
+		
+		if (!gameObject.Initialize(".\\Data\\Cube.obj", this->device.Get(), this->deviceContext.Get(), NULL, this->cb_vs_vertexshader))
 			return false;
 
 		camera.SetPosition(0.0f, 0.0f, -200.0f);
