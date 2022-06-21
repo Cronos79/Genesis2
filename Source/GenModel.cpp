@@ -106,7 +106,9 @@ GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	std::vector<GenTexture> textures;
-	textures.push_back(GenTexture(this->device, Colors::UnloadedTextureColor, aiTextureType::aiTextureType_DIFFUSE));
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	std::vector<GenTexture> diffuseTextures = LoadMaterialTextures(material, aiTextureType::aiTextureType_DIFFUSE, scene);
+	textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
 
 	return GenMesh(this->device, this->deviceContext, vertices, indices, textures);
 }
