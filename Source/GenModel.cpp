@@ -7,12 +7,12 @@
    ======================================================================== */
 #include "GenModel.h"
 #include "GenMacros.h"
+#include "GenTexture.h"
 
-bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ID3D11ShaderResourceView* texture, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader)
+bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader)
 {
 	this->device = device;
 	this->deviceContext = deviceContext;
-	this->texture = texture;
 	this->cb_vs_vertexshader = &cb_vs_vertexshader;
 
 	try
@@ -29,11 +29,6 @@ bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3
 	return true;
 }
 
-void GenModel::SetTexture(ID3D11ShaderResourceView* texture)
-{
-	this->texture = texture;
-}
-
 void GenModel::Draw(const XMMATRIX& worldMatrix, const XMMATRIX& viewProjectionMatrix)
 {
 	//Update Constant buffer with WVP Matrix
@@ -41,8 +36,6 @@ void GenModel::Draw(const XMMATRIX& worldMatrix, const XMMATRIX& viewProjectionM
 	this->cb_vs_vertexshader->data.mat = XMMatrixTranspose(this->cb_vs_vertexshader->data.mat);
 	this->cb_vs_vertexshader->ApplyChanges();
 	this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader->GetAddressOf());
-
-	this->deviceContext->PSSetShaderResources(0, 1, &this->texture); //Set Texture
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
@@ -112,5 +105,38 @@ GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 			indices.push_back(face.mIndices[j]);
 	}
 
-	return GenMesh(this->device, this->deviceContext, vertices, indices);
+	std::vector<GenTexture> textures;
+	textures.push_back(GenTexture(this->device, Colors::UnloadedTextureColor, aiTextureType::aiTextureType_DIFFUSE));
+
+	return GenMesh(this->device, this->deviceContext, vertices, indices, textures);
+}
+
+std::vector<GenTexture> GenModel::LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, const aiScene* pScene)
+{
+	std::vector<GenTexture> materialTextures;
+	TextureStorageType storetype = TextureStorageType::Invalid;
+	unsigned int textureCount = pMaterial->GetTextureCount(textureType);
+
+	if (textureCount == 0) //If there are no textures
+	{
+		storetype = TextureStorageType::None;
+		aiColor3D aiColor(0.0f, 0.0f, 0.0f);
+		switch (textureType)
+		{
+		case aiTextureType_DIFFUSE:
+			pMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiColor);
+			if (aiColor.IsBlack()) //If color = black, just use grey
+			{
+				materialTextures.push_back(GenTexture(this->device, Colors::UnloadedTextureColor, textureType));
+				return materialTextures;
+			}
+			materialTextures.push_back(GenTexture(this->device, GenColor(aiColor.r * 255, aiColor.g * 255, aiColor.b * 255), textureType));
+			return materialTextures;
+		}
+	}
+	else
+	{
+		materialTextures.push_back(GenTexture(this->device, Colors::UnhandledTextureColor, aiTextureType::aiTextureType_DIFFUSE));
+		return materialTextures;
+	}
 }

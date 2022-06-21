@@ -95,12 +95,14 @@
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
+    <ClCompile Include="Source\GenColor.cpp" />
     <ClCompile Include="Source\Genesis.cpp" />
     <ClCompile Include="Source\GenException.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
     <ClCompile Include="Source\GenMesh.cpp" />
     <ClCompile Include="Source\GenModel.cpp" />
+    <ClCompile Include="Source\GenTexture.cpp" />
     <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
     <ClCompile Include="Source\imgui\imgui.cpp" />
@@ -129,6 +131,7 @@
     <ClInclude Include="Source\ConstantBufferTypes.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\GenCamera.h" />
+    <ClInclude Include="Source\GenColor.h" />
     <ClInclude Include="Source\Genesis.h" />
     <ClInclude Include="Source\GenGraphics.h" />
     <ClInclude Include="Source\GenMacros.h" />
@@ -138,6 +141,7 @@
     <ClInclude Include="Source\GenLogger.h" />
     <ClInclude Include="Source\GenMesh.h" />
     <ClInclude Include="Source\GenModel.h" />
+    <ClInclude Include="Source\GenTexture.h" />
     <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
     <ClInclude Include="Source\GenWindow.h" />
