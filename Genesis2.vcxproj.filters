@@ -68,6 +68,7 @@
     <None Include="README.md">
       <Filter>Misc</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\WinEntry.cpp">

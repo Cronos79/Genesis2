@@ -8,6 +8,8 @@
 #include "GenTexture.h"
 #include "GenMacros.h"
 #include "FunctionLib.h"
+#include <WICTextureLoader.h>
+#include <DDSTextureLoader.h>
 
 GenTexture::GenTexture(ID3D11Device* device, const GenColor& color, aiTextureType type)
 {
