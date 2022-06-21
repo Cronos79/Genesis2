@@ -80,18 +80,18 @@ void GenGraphics::RenderFrame()
 	//OutputDebugStringA(fpsString.c_str());
 
 	// Start the Dear ImGui frame
-	//ImGui_ImplDX11_NewFrame();
-	//ImGui_ImplWin32_NewFrame();
-	//ImGui::NewFrame();
-	////Create ImGui Test Window
-	//ImGui::Begin("App info");
-	//ImGui::Text(fpsString.c_str());
-	////ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
-	//ImGui::End();
-	////Assemble Together Draw Data
-	//ImGui::Render();
-	////Render Draw Data
-	//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	//Create ImGui Test Window
+	ImGui::Begin("App info");
+	ImGui::Text(fpsString.c_str());
+	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
+	ImGui::End();
+	//Assemble Together Draw Data
+	ImGui::Render();
+	//Render Draw Data
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	this->swapchain->Present(0, NULL);
 }

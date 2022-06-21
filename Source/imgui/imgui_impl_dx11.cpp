@@ -36,8 +36,9 @@
 #include <stdio.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
-
-#pragma  comment(lib, "d3dcompiler.lib")
+#ifdef _MSC_VER
+#pragma comment(lib, "d3dcompiler") // Automatically link with d3dcompiler.lib as we are using D3DCompile() below.
+#endif
 
 // DirectX11 data
 struct ImGui_ImplDX11_Data

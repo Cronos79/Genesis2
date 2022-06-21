@@ -16,7 +16,7 @@ class VertexBuffer
 {
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-	std::shared_ptr<UINT> stride;
+	UINT stride = sizeof(T);
 	UINT bufferSize = 0;
 
 public:
@@ -54,12 +54,12 @@ public:
 
 	const UINT Stride() const
 	{
-		return *this->stride.get();
+		return this->stride;
 	}
 
 	const UINT* StridePtr() const
 	{
-		return this->stride.get();
+		return &this->stride;
 	}
 
 	HRESULT Initialize(ID3D11Device* device, T* data, UINT numVertices)
@@ -68,8 +68,6 @@ public:
 			buffer.Reset();
 
 		this->bufferSize = numVertices;
-		if (this->stride.get() == nullptr)
-			this->stride = std::make_shared<UINT>(sizeof(T));
 
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
