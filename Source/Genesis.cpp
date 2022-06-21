@@ -35,16 +35,27 @@ void Genesis::Update()
 
 	const float cameraSpeed = 0.006f;	
 
+	_window->mouse.EnableRaw();
 	if (_window->mouse.RightIsPressed())
 	{
-		float mposX = (float)_window->mouse.GetPosX() - 400.0f;
-		float mposY = (float)_window->mouse.GetPosY() - 300.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		x = -(float)(mposX * cameraSpeed * dt) / 8.0f;
-		y = -(float)(mposY * cameraSpeed * dt) / 8.0f;
-		_window->Gfx().camera.AdjustRotation(y * 0.01f, x * 0.01f, 0); // #TODO: Mouse is all over the place		
-	}	
+		auto raw = _window->mouse.ReadRawDelta();
+		if (_window->mouse.RawEnabled() && raw)
+		{
+			_window->Gfx().camera.AdjustRotation((float)raw->y * 0.01f, (float)raw->x * 0.01f, 0);
+		}
+		else
+		{
+			float mposX = (float)_window->mouse.GetPosX() - 400.0f;
+			float mposY = (float)_window->mouse.GetPosY() - 300.0f;
+			float x = 0.0f;
+			float y = 0.0f;
+			x = -(float)(mposX * cameraSpeed * dt) / 8.0f;
+			y = -(float)(mposY * cameraSpeed * dt) / 8.0f;
+			_window->Gfx().camera.AdjustRotation(y * 0.01f, x * 0.01f, 0); // #TODO: Mouse is all over the place	
+		}
+	}
+
+	_window->Gfx().gameObject.AdjustRotation(0.0f, 0.001f * dt, 0.0f);
 
 	if (_window->kbd.KeyIsPressed('W'))
 	{

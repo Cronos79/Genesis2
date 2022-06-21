@@ -32,12 +32,11 @@ public:
 	bool Initialize(HWND hwnd, int width, int height);
 	void RenderFrame();
 	GenCamera camera;
+	GameObject gameObject;
 private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
 	bool InitializeScene();
-
-	GameObject gameObject;
 
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
