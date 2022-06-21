@@ -28,6 +28,8 @@ class GenTexture
 public:
 	GenTexture(ID3D11Device* device, const GenColor& color, aiTextureType type);
 	GenTexture(ID3D11Device* device, const GenColor* colorData, UINT width, UINT height, aiTextureType type); //Generate texture of specific color data
+	GenTexture(ID3D11Device* device, const std::string& filePath, aiTextureType type);
+
 	aiTextureType GetType();
 	ID3D11ShaderResourceView* GetTextureResourceView();
 	ID3D11ShaderResourceView** GetTextureResourceViewAddress();
