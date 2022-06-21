@@ -17,7 +17,7 @@ class VertexBuffer
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
 	UINT stride = sizeof(T);
-	UINT bufferSize = 0;
+	UINT vertexCount = 0;
 
 public:
 	VertexBuffer() {}
@@ -25,14 +25,14 @@ public:
 	VertexBuffer(const VertexBuffer<T>& rhs)
 	{
 		this->buffer = rhs.buffer;
-		this->bufferSize = rhs.bufferSize;
+		this->vertexCount = rhs.vertexCount;
 		this->stride = rhs.stride;
 	}
 
 	VertexBuffer<T>& operator=(const VertexBuffer<T>& a)
 	{
 		this->buffer = a.buffer;
-		this->bufferSize = a.bufferSize;
+		this->vertexCount = a.vertexCount;
 		this->stride = a.stride;
 		return *this;
 	}
@@ -47,9 +47,9 @@ public:
 		return buffer.GetAddressOf();
 	}
 
-	UINT BufferSize() const
+	UINT VertexCount() const
 	{
-		return this->bufferSize;
+		return this->vertexCount;
 	}
 
 	const UINT Stride() const
@@ -67,7 +67,7 @@ public:
 		if (buffer.Get() != nullptr)
 			buffer.Reset();
 
-		this->bufferSize = numVertices;
+		this->vertexCount = numVertices;
 
 		D3D11_BUFFER_DESC vertexBufferDesc;
 		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
