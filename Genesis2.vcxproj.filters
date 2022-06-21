@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{2d1e1ff7-ebc3-4efc-84d0-bdacc55e3701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{865f532d-3718-46a0-8b8e-240527249d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Windows">
+      <UniqueIdentifier>{f01ed034-266f-4b99-a8ce-81ed5cbc638e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Windows">
+      <UniqueIdentifier>{4ec08d8b-9cd7-4053-a7a6-f91826be2620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Utility">
+      <UniqueIdentifier>{80f3c2b0-b5fb-40c3-b9df-ed37a866386b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Utility">
+      <UniqueIdentifier>{a87cbd49-d79f-4080-915a-cf913f6fbdf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Game">
+      <UniqueIdentifier>{d63afd59-fd78-44dd-9eb9-458691d34f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game">
+      <UniqueIdentifier>{c0e2f004-aa25-4484-9294-76d3dff1a042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Graphics">
+      <UniqueIdentifier>{65512e3c-6430-4be1-9ddb-bc0a9aa7837d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Graphics">
+      <UniqueIdentifier>{a268506b-1597-4be3-8cd3-f559118acffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shaders">
+      <UniqueIdentifier>{8ce12f0f-c5e7-41a3-a344-007543a3be4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Graphics\Imgui">
+      <UniqueIdentifier>{f1a439ba-4b94-47fe-aa72-0c70daaf10fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Graphics\Imgui">
+      <UniqueIdentifier>{ffedf7f5-2205-4478-a193-917a4ce6528a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Misc\TODO.txt">
+      <Filter>Misc</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore">
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="LICENSE.md">
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="README.md">
+      <Filter>Misc</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\WinEntry.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenWindow.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenApp.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenException.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Keyboard.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FunctionLib.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenLogger.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mouse.cpp">
+      <Filter>Source\Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenTimer.cpp">
+      <Filter>Source\Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Genesis.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenGraphics.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AdapterReader.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shaders.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenCamera.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_widgets.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_tables.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_impl_win32.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_impl_dx11.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui_draw.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\imgui\imgui.cpp">
+      <Filter>Source\Source Files\Graphics\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenModel.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenMesh.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenColor.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenTexture.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\GenApp.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenWindow.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenException.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Keyboard.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FunctionLib.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenLogger.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenMacros.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mouse.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenWin.h">
+      <Filter>Source\Header Files\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenTimer.h">
+      <Filter>Source\Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Genesis.h">
+      <Filter>Source\Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGraphics.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AdapterReader.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shaders.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VertexBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IndexBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ConstantBufferTypes.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ConstantBuffer.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenCamera.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imconfig.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_impl_dx11.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_impl_win32.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imgui_internal.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_rectpack.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_textedit.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\imgui\imstb_truetype.h">
+      <Filter>Source\Header Files\Graphics\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenMesh.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenModel.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject.h">
+      <Filter>Source\Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenColor.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenTexture.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Genesis2.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\VertexShader.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+/* ========================================================================
+   $File: $
+   $Date: $
+   $Revision: $
+   $Creator: Matt Brock $
+   $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
+   ======================================================================== */
+#pragma once
+
+TODO List
+	- file io
+	- xinput
+	- dx11	
+	- xaudio2
+	- ui
+	-- test ui
+	-- real ui
+	- start game code
+
+
+d3d11.lib
+DXGI.lib
+d3d11.lib
+d3dcompiler.lib
