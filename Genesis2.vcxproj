@@ -100,6 +100,7 @@
     <ClCompile Include="Source\GenException.cpp" />
     <ClCompile Include="Source\GenGameObject.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
+    <ClCompile Include="Source\GenLight.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
     <ClCompile Include="Source\GenMesh.cpp" />
     <ClCompile Include="Source\GenModel.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="Source\Genesis.h" />
     <ClInclude Include="Source\GenGameObject.h" />
     <ClInclude Include="Source\GenGraphics.h" />
+    <ClInclude Include="Source\GenLight.h" />
     <ClInclude Include="Source\GenMacros.h" />
     <ClInclude Include="Source\FunctionLib.h" />
     <ClInclude Include="Source\GenApp.h" />
@@ -171,6 +173,12 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_nolight.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

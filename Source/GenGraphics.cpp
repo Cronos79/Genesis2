@@ -48,6 +48,9 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 
 void GenGraphics::RenderFrame()
 {
+	this->cb_ps_light.data.dynamicLightColor = light.lightColor;
+	this->cb_ps_light.data.dynamicLightStrength = light.lightStrength;
+	this->cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
 	this->cb_ps_light.ApplyChanges();
 	this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_light.GetAddressOf());
 
@@ -68,6 +71,10 @@ void GenGraphics::RenderFrame()
 
 	{
 		this->gameObject.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
+	}
+	{
+		this->deviceContext->PSSetShader(pixelshader_nolight.GetShader(), NULL, 0);
+		this->light.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
 	}
 
 	// FPS
@@ -334,6 +341,9 @@ bool GenGraphics::InitializeShaders()
 	if (!pixelshader.Initialize(this->device, shaderfolder + L"PixelShader.cso"))
 		return false;
 
+	if (!pixelshader_nolight.Initialize(this->device, shaderfolder + L"PixelShader_nolight.cso"))
+		return false;
+
 	GenLogger::Info("Shaders loaded");
 
 	return true;
@@ -354,6 +364,9 @@ bool GenGraphics::InitializeScene()
 		this->cb_ps_light.data.ambientLightStrength = 1.0f;
 		
 		if (!gameObject.Initialize(".\\Data\\Cube.fbx", this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
+			return false;
+
+		if (!light.Initialize(this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
 			return false;
 
 		camera.SetPosition(0.0f, 0.0f, -200.0f);

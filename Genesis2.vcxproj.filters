@@ -149,6 +149,9 @@
     <ClCompile Include="Source\GenGameObject.cpp">
       <Filter>Source\Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenLight.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -256,6 +259,9 @@
     <ClInclude Include="Source\GenGameObject.h">
       <Filter>Source\Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GenLight.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Genesis2.rc">
@@ -272,6 +278,9 @@
       <Filter>Source\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\PixelShader.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_nolight.hlsl">
       <Filter>Source\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

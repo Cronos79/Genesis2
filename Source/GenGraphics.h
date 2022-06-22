@@ -22,6 +22,7 @@
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
 #include "GenGameObject.h"
+#include "GenLight.h"
 
 class GenGraphics
 {
@@ -33,6 +34,7 @@ public:
 	void RenderFrame();
 	GenCamera camera;
 	GenGameObject gameObject;
+	GenLight light;
 private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
@@ -47,6 +49,7 @@ private:
 
 	VertexShader vertexshader;
 	PixelShader pixelshader;
+	PixelShader pixelshader_nolight;
 
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
 	ConstantBuffer<CB_PS_light> cb_ps_light;

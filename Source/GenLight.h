@@ -6,20 +6,14 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
-#include <DirectXMath.h>
 
-struct CB_VS_vertexshader
+#include "GenGameObject.h"
+
+class GenLight : public GenGameObject
 {
-	DirectX::XMMATRIX wvpMatrix;
-	DirectX::XMMATRIX worldMatrix;
-};
+public:
+	bool Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader);
 
-struct CB_PS_light
-{
-	DirectX::XMFLOAT3 ambientLightColor;
-	float ambientLightStrength;
-
-	DirectX::XMFLOAT3 dynamicLightColor;
-	float dynamicLightStrength;
-	DirectX::XMFLOAT3 dynamicLightPosition;
+	DirectX::XMFLOAT3 lightColor = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
+	float lightStrength = 1.0f;
 };
