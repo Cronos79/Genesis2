@@ -11,3 +11,8 @@ GenLevel::GenLevel()
 {
 
 }
+
+bool GenLevel::LoadLevel()
+{
+	return true;
+}

@@ -10,5 +10,6 @@ class GenLevel
 {
 public:
 	GenLevel();
+	bool LoadLevel();
 };
 
