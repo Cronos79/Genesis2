@@ -94,6 +94,7 @@
     <ClCompile Include="Source\FunctionLib.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
+    <ClCompile Include="Source\GenAssetMng.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
     <ClCompile Include="Source\GenCamera2D.cpp" />
     <ClCompile Include="Source\GenColor.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Source\ConstantBuffer.h" />
     <ClInclude Include="Source\ConstantBufferTypes.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\GenAssetMng.h" />
     <ClInclude Include="Source\GenCamera.h" />
     <ClInclude Include="Source\GenCamera2D.h" />
     <ClInclude Include="Source\GenColor.h" />

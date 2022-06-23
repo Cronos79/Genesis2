@@ -8,6 +8,7 @@
 #pragma once
 #include "GenTimer.h"
 #include "GenWindow.h"
+#include "GenLevel.h"
 class Genesis
 {
 public:
@@ -15,9 +16,12 @@ public:
 	void Start();
 	void Update();
 	void Render();
-	void UpdateSound();
+	void UpdateSound();	
 private:
+	void InputHandler(float dt);
+	void ImGuiHandler();
 	GenTimer* DeltaTime;
 	GenWindow* _window;
+	GenLevel* currentLevel;
 };
 

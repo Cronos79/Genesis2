@@ -11,30 +11,153 @@
 Genesis::Genesis(GenWindow* window)
 {
 	_window = window;
+	currentLevel = new GenLevel(&_window->Gfx());
 	DeltaTime = new GenTimer();
 }
 
 void Genesis::Start()
 {
 	GenLogger::Info("Genesis starting");
+	currentLevel->LoadLevel("Test");
 }
 
 void Genesis::Update()
 {
 	float dt = DeltaTime->Mark() * 1000;
+	InputHandler(dt);
 
-	bool aDown = false;
-	if (_window->kbd.KeyIsPressed('A'))
+	_window->Gfx().cb_ps_light.data.dynamicLightColor = _window->Gfx().light.lightColor;
+	_window->Gfx().cb_ps_light.data.dynamicLightStrength = _window->Gfx().light.lightStrength;
+	_window->Gfx().cb_ps_light.data.dynamicLightPosition = _window->Gfx().light.GetPositionFloat3();
+	_window->Gfx().cb_ps_light.data.dynamicLightAttenuation_a = _window->Gfx().light.attenuation_a;
+	_window->Gfx().cb_ps_light.data.dynamicLightAttenuation_b = _window->Gfx().light.attenuation_b;
+	_window->Gfx().cb_ps_light.data.dynamicLightAttenuation_c = _window->Gfx().light.attenuation_c;
+	_window->Gfx().cb_ps_light.ApplyChanges();
+	_window->Gfx().deviceContext->PSSetConstantBuffers(0, 1, _window->Gfx().cb_ps_light.GetAddressOf());
+
+	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	_window->Gfx().deviceContext->ClearRenderTargetView(_window->Gfx().renderTargetView.Get(), bgcolor);
+	_window->Gfx().deviceContext->ClearDepthStencilView(_window->Gfx().depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	_window->Gfx().deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	_window->Gfx().deviceContext->RSSetState(_window->Gfx().rasterizerState.Get());
+	_window->Gfx().deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
+	_window->Gfx().deviceContext->PSSetSamplers(0, 1, _window->Gfx().samplerState.GetAddressOf());
+
+
+	_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState_drawMask.Get(), 0);
+	_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_2d"]->GetInputLayout());
+	_window->Gfx().deviceContext->PSSetShader(nullptr, NULL, 0); // pixelshader_2d.GetShader()
+	_window->Gfx().deviceContext->VSSetShader(currentLevel->assetMng->vertexShaders["vs_2d"]->GetShader(), NULL, 0);
+	_window->Gfx().sprite.Draw(_window->Gfx().camera2D.GetWorldMatrix() * _window->Gfx().camera2D.GetOrthoMatrix());
+
+	_window->Gfx().deviceContext->VSSetShader(currentLevel->assetMng->vertexShaders["vs_default"]->GetShader(), NULL, 0);
+	_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_default"]->GetShader(), NULL, 0);
+	_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_default"]->GetInputLayout());
+	_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState.Get(), 0); // depthStencilState_applyMask.Get()
+
 	{
-		aDown = true;
+		_window->Gfx().gameObject.Draw(_window->Gfx().camera.GetViewMatrix()* _window->Gfx().camera.GetProjectionMatrix());
+	}
+	{
+		_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0);
+		_window->Gfx().light.Draw(_window->Gfx().camera.GetViewMatrix() * _window->Gfx().camera.GetProjectionMatrix());
+	}
+
+	_window->Gfx().gameObject.AdjustRotation(0.0f, 0.001f * dt, 0.0f);
+}
+
+void Genesis::ImGuiHandler()
+{
+	// FPS
+	static int fpsCounter = 0;
+	static std::string fpsString = "FPS: 0";
+	fpsCounter += 1;
+	if (_window->Gfx().fpsTimer.Peek() * 1000 > 1000.0)
+	{
+		fpsString = "FPS: " + std::to_string(fpsCounter) + "\n";
+		fpsCounter = 0;
+		_window->Gfx().fpsTimer.Mark();
+	}
+	//OutputDebugStringA(fpsString.c_str());
+	
+	// Start the Dear ImGui frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	//Create ImGui Test Window
+	ImGui::Begin("App info");
+	ImGui::Text(fpsString.c_str());
+	ImGui::DragFloat3("Ambient Light Color", &this->_window->Gfx().cb_ps_light.data.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Light Strength", &this->_window->Gfx().cb_ps_light.data.ambientLightStrength, 0.01f, 0.0f, 1.0f);
+	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
+	ImGui::NewLine();
+	ImGui::DragFloat3("Dynamic Light Color", &this->_window->Gfx().light.lightColor.x, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Strength", &this->_window->Gfx().light.lightStrength, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation A", &this->_window->Gfx().light.attenuation_a, 0.01f, 0.1f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation B", &this->_window->Gfx().light.attenuation_b, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation C", &this->_window->Gfx().light.attenuation_c, 0.01f, 0.0f, 10.0f);
+	ImGui::End();
+	//Assemble Together Draw Data
+	ImGui::Render();
+	//Render Draw Data
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Genesis::Render()
+{
+	ImGuiHandler();
+	_window->Gfx().RenderFrame();
+}
+
+void Genesis::UpdateSound()
+{
+
+}
+
+void Genesis::InputHandler(float dt)
+{
+	bool upDown = false;
+	bool downDown = false;
+	bool leftDown = false;
+	bool rightDown = false;
+	if (_window->kbd.KeyIsPressed('W'))
+	{
+		upDown = true;
 	}
 	else
 	{
-		aDown = false;
+		upDown = false;
+	}
+	if (_window->kbd.KeyIsPressed('A'))
+	{
+		leftDown = true;
+	}
+	else
+	{
+		leftDown = false;
+	}
+	if (_window->kbd.KeyIsPressed('S'))
+	{
+		downDown = true;
+	}
+	else
+	{
+		downDown = false;
+	}
+	if (_window->kbd.KeyIsPressed('D'))
+	{
+		rightDown = true;
+	}
+	else
+	{
+		rightDown = false;
 	}
 
-	const float cameraSpeed = 0.006f;	
 
+
+
+	const float cameraSpeed = 0.006f;
 	_window->mouse.EnableRaw();
 	if (_window->mouse.RightIsPressed())
 	{
@@ -55,31 +178,9 @@ void Genesis::Update()
 		}
 	}
 
-	_window->Gfx().gameObject.AdjustRotation(0.0f, 0.001f * dt, 0.0f);
-
-	if (_window->kbd.KeyIsPressed('W'))
+	if (upDown)
 	{
 		_window->Gfx().camera.AdjustPosition(_window->Gfx().camera.GetForwardVector() * cameraSpeed * dt);
-	}
-	if (_window->kbd.KeyIsPressed('S'))
-	{
-		_window->Gfx().camera.AdjustPosition(_window->Gfx().camera.GetBackwardVector() * cameraSpeed * dt);
-	}
-	if (_window->kbd.KeyIsPressed('A'))
-	{
-		_window->Gfx().camera.AdjustPosition(_window->Gfx().camera.GetLeftVector() * cameraSpeed * dt);
-	}
-	if (_window->kbd.KeyIsPressed('D'))
-	{
-		_window->Gfx().camera.AdjustPosition(_window->Gfx().camera.GetRightVector() * cameraSpeed * dt);
-	}
-	if (_window->kbd.KeyIsPressed(VK_SPACE))
-	{
-		_window->Gfx().camera.AdjustPosition(0.0f, cameraSpeed * dt, 0.0f);
-	}
-	if (_window->kbd.KeyIsPressed('Z'))
-	{
-		_window->Gfx().camera.AdjustPosition(0.0f, -cameraSpeed * dt, 0.0f);
 	}
 	if (_window->kbd.KeyIsPressed('C'))
 	{
@@ -88,14 +189,4 @@ void Genesis::Update()
 		_window->Gfx().light.SetPosition(lightPosition);
 		_window->Gfx().light.SetRotation(_window->Gfx().camera.GetRotationFloat3());
 	}
-}
-
-void Genesis::Render()
-{
-	_window->Gfx().RenderFrame();
-}
-
-void Genesis::UpdateSound()
-{
-
 }

@@ -29,9 +29,6 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 	if (!InitializeDirectX(hwnd))
 		return false;
 
-	if (!InitializeShaders())
-		return false;
-
 	if (!InitializeScene())
 		return false;
 
@@ -48,78 +45,6 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 
 void GenGraphics::RenderFrame()
 {
-	cb_ps_light.data.dynamicLightColor = light.lightColor;
-	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
-	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
-	cb_ps_light.data.dynamicLightAttenuation_a = light.attenuation_a;
-	cb_ps_light.data.dynamicLightAttenuation_b = light.attenuation_b;
-	cb_ps_light.data.dynamicLightAttenuation_c = light.attenuation_c;
-	cb_ps_light.ApplyChanges();
-	deviceContext->PSSetConstantBuffers(0, 1, cb_ps_light.GetAddressOf());
-
-	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	deviceContext->ClearRenderTargetView(renderTargetView.Get(), bgcolor);
-	deviceContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	deviceContext->RSSetState(rasterizerState.Get());
-	deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
-	deviceContext->PSSetSamplers(0, 1, samplerState.GetAddressOf());
-
-
-	deviceContext->OMSetDepthStencilState(depthStencilState_drawMask.Get(), 0);
-	deviceContext->IASetInputLayout(vertexshader_2d.GetInputLayout());
-	deviceContext->PSSetShader(nullptr, NULL, 0); // pixelshader_2d.GetShader()
-	deviceContext->VSSetShader(vertexshader_2d.GetShader(), NULL, 0);
-	sprite.Draw(camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix());
-
-	deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
-	deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
-	deviceContext->IASetInputLayout(vertexshader.GetInputLayout());
-	deviceContext->OMSetDepthStencilState(depthStencilState.Get(), 0); // depthStencilState_applyMask.Get()
-
-	{
-		this->gameObject.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
-	}
-	{
-		this->deviceContext->PSSetShader(pixelshader_nolight.GetShader(), NULL, 0);
-		this->light.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
-	}
-
-	// FPS
-	static int fpsCounter = 0;
-	static std::string fpsString = "FPS: 0";
-	fpsCounter += 1;
-	if (fpsTimer.Peek() * 1000 > 1000.0)
-	{
-		fpsString = "FPS: " + std::to_string(fpsCounter) + "\n";
-		fpsCounter = 0;
-		fpsTimer.Mark();
-	}
-	//OutputDebugStringA(fpsString.c_str());
-
-	// Start the Dear ImGui frame
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-	//Create ImGui Test Window
-	ImGui::Begin("App info");
-	ImGui::Text(fpsString.c_str());
-	ImGui::DragFloat3("Ambient Light Color", &this->cb_ps_light.data.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat("Ambient Light Strength", &this->cb_ps_light.data.ambientLightStrength, 0.01f, 0.0f, 1.0f);
-	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
-	ImGui::NewLine();
-	ImGui::DragFloat3("Dynamic Light Color", &this->light.lightColor.x, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Strength", &this->light.lightStrength, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation A", &this->light.attenuation_a, 0.01f, 0.1f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation B", &this->light.attenuation_b, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation C", &this->light.attenuation_c, 0.01f, 0.0f, 10.0f);
-	ImGui::End();
-	//Assemble Together Draw Data
-	ImGui::Render();
-	//Render Draw Data
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
 	this->swapchain->Present(0, NULL);
 }
 
@@ -316,66 +241,6 @@ bool GenGraphics::InitializeDirectX(HWND hwnd)
 		GenLogger::Error(hr, "Failed to create sampler state.");
 		return false;
 	}
-
-	return true;
-}
-
-bool GenGraphics::InitializeShaders()
-{
-	std::wstring shaderfolder = L"";
-#pragma region DetermineShaderPath
-	if (IsDebuggerPresent() == TRUE)
-	{
-#ifdef _DEBUG //Debug Mode
-#ifdef _WIN64 //x64
-		shaderfolder = L".\\x64\\Debug\\";
-#else  //x86 (Win32)
-		shaderfolder = L".\\Debug\\";
-#endif
-#else //Release Mode
-#ifdef _WIN64 //x64
-		shaderfolder = L".\\x64\\Release\\";
-#else  //x86 (Win32)
-		shaderfolder = L".\\Release\\";
-#endif
-#endif
-	}
-	//2d shaders
-	D3D11_INPUT_ELEMENT_DESC layout2D[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-	};
-
-	UINT numElements2D = ARRAYSIZE(layout2D);
-
-	if (!vertexshader_2d.Initialize(this->device, shaderfolder + L"VertexShader_2d.cso", layout2D, numElements2D))
-		return false;
-
-	if (!pixelshader_2d.Initialize(this->device, shaderfolder + L"PixelShader_2d.cso"))
-		return false;
-
-	// 3D shaders
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"NORMAL", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-	};
-
-	UINT numElements = ARRAYSIZE(layout);
-
-
-	if (!vertexshader.Initialize(this->device, shaderfolder + L"VertexShader.cso", layout, numElements))
-		return false;
-
-	if (!pixelshader.Initialize(this->device, shaderfolder + L"PixelShader.cso"))
-		return false;
-
-	if (!pixelshader_nolight.Initialize(this->device, shaderfolder + L"PixelShader_nolight.cso"))
-		return false;
-
-	GenLogger::Info("Shaders loaded");
 
 	return true;
 }

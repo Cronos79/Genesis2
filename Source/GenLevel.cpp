@@ -7,12 +7,23 @@
    ======================================================================== */
 #include "GenLevel.h"
 
-GenLevel::GenLevel()
+GenLevel::GenLevel(GenGraphics* gfx)
 {
-
+	if (!assestMngEnabled)
+	{
+		InitAssetMng(gfx);
+	}	
 }
 
-bool GenLevel::LoadLevel()
+bool GenLevel::LoadLevel(std::string name)
 {
+	return true;
+}
+
+bool GenLevel::InitAssetMng(GenGraphics* gfx)
+{
+	assetMng = new GenAssetMng(gfx);
+	assetMng->LoadAssets();
+	assestMngEnabled = true;
 	return true;
 }

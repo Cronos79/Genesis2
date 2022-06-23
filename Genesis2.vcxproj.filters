@@ -173,6 +173,9 @@
     <ClCompile Include="Source\GenSprite.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenAssetMng.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="Source\GenSprite.h">
       <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenAssetMng.h">
+      <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
