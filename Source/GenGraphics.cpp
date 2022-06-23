@@ -92,6 +92,11 @@ void GenGraphics::RenderFrame()
 	}
 	//OutputDebugStringA(fpsString.c_str());
 
+	deviceContext->IASetInputLayout(vertexshader_2d.GetInputLayout());
+	deviceContext->PSSetShader(pixelshader_2d.GetShader(), NULL, 0);
+	deviceContext->VSSetShader(vertexshader_2d.GetShader(), NULL, 0);
+	sprite.Draw(camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix());
+
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -333,7 +338,22 @@ bool GenGraphics::InitializeShaders()
 #endif
 #endif
 	}
+	//2d shaders
+	D3D11_INPUT_ELEMENT_DESC layout2D[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
+	};
 
+	UINT numElements2D = ARRAYSIZE(layout2D);
+
+	if (!vertexshader_2d.Initialize(this->device, shaderfolder + L"VertexShader_2d.cso", layout2D, numElements2D))
+		return false;
+
+	if (!pixelshader_2d.Initialize(this->device, shaderfolder + L"PixelShader_2d.cso"))
+		return false;
+
+	// 3D shaders
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
@@ -363,7 +383,10 @@ bool GenGraphics::InitializeScene()
 	try
 	{
 		//Initialize Constant Buffer(s)
-		HRESULT hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
+		HRESULT hr = this->cb_vs_vertexshader_2d.Initialize(this->device.Get(), this->deviceContext.Get());
+		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize 2d constant buffer.");
+
+		hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
 
 		hr = this->cb_ps_light.Initialize(this->device.Get(), this->deviceContext.Get());
@@ -377,6 +400,11 @@ bool GenGraphics::InitializeScene()
 
 		if (!light.Initialize(this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
 			return false;
+
+		if (!sprite.Initialize(this->device.Get(), this->deviceContext.Get(), 256, 256, "./Data/sprite_256x256.png", cb_vs_vertexshader_2d))
+			return false;
+
+		camera2D.SetProjectionValues(windowWidth, windowHeight, 0.0f, 1.0f);
 
 		camera.SetPosition(0.0f, 0.0f, -200.0f);
 		camera.SetProjectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);

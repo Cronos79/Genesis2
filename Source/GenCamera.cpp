@@ -1,3 +1,10 @@
+/* ========================================================================
+   $File: $
+   $Date: $
+   $Revision: $
+   $Creator: Matt Brock $
+   $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
+   ======================================================================== */
 #include "GenCamera.h"
 
 GenCamera::GenCamera()
@@ -27,11 +34,11 @@ const XMMATRIX& GenCamera::GetProjectionMatrix() const
 
 void GenCamera::UpdateMatrix()
 {
-	//Calculate camera rotation matrix
+	//Calculate Camera3D rotation matrix
 	XMMATRIX camRotationMatrix = XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z);
-	//Calculate unit vector of cam target based off camera forward value transformed by cam rotation matrix
+	//Calculate unit vector of cam target based off Camera3D forward value transformed by cam rotation matrix
 	XMVECTOR camTarget = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, camRotationMatrix);
-	//Adjust cam target to be offset by the camera's current position
+	//Adjust cam target to be offset by the Camera3D's current position
 	camTarget += this->posVector;
 	//Calculate up direction based on current rotation
 	XMVECTOR upDir = XMVector3TransformCoord(this->DEFAULT_UP_VECTOR, camRotationMatrix);

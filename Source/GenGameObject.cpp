@@ -6,7 +6,6 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #include "GenGameObject.h"
-
 bool GenGameObject::Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader)
 {
 	if (!model.Initialize(filePath, device, deviceContext, cb_vs_vertexshader))

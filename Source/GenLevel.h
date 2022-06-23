@@ -5,9 +5,10 @@
    $Creator: Matt Brock $
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
-#include "GenGameObject2d.h"
-
-void GenGameObject2d::UpdateMatrix()
+#pragma once
+class GenLevel
 {
-	assert("UpdateMatrix must be overridden." && 0);
-}
+public:
+	GenLevel();
+};
+
