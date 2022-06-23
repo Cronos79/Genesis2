@@ -48,29 +48,35 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 
 void GenGraphics::RenderFrame()
 {
-	this->cb_ps_light.data.dynamicLightColor = light.lightColor;
-	this->cb_ps_light.data.dynamicLightStrength = light.lightStrength;
-	this->cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
-	this->cb_ps_light.data.dynamicLightAttenuation_a = light.attenuation_a;
-	this->cb_ps_light.data.dynamicLightAttenuation_b = light.attenuation_b;
-	this->cb_ps_light.data.dynamicLightAttenuation_c = light.attenuation_c;
-	this->cb_ps_light.ApplyChanges();
-	this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_light.GetAddressOf());
+	cb_ps_light.data.dynamicLightColor = light.lightColor;
+	cb_ps_light.data.dynamicLightStrength = light.lightStrength;
+	cb_ps_light.data.dynamicLightPosition = light.GetPositionFloat3();
+	cb_ps_light.data.dynamicLightAttenuation_a = light.attenuation_a;
+	cb_ps_light.data.dynamicLightAttenuation_b = light.attenuation_b;
+	cb_ps_light.data.dynamicLightAttenuation_c = light.attenuation_c;
+	cb_ps_light.ApplyChanges();
+	deviceContext->PSSetConstantBuffers(0, 1, cb_ps_light.GetAddressOf());
 
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), bgcolor);
-	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	deviceContext->ClearRenderTargetView(renderTargetView.Get(), bgcolor);
+	deviceContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	this->deviceContext->IASetInputLayout(this->vertexshader.GetInputLayout());
-	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	this->deviceContext->RSSetState(this->rasterizerState.Get());
-	this->deviceContext->OMSetDepthStencilState(this->depthStencilState.Get(), 0);
-	this->deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
-	this->deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
-	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
-	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	deviceContext->RSSetState(rasterizerState.Get());
+	deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
+	deviceContext->PSSetSamplers(0, 1, samplerState.GetAddressOf());
 
-	UINT offset = 0;
+
+	deviceContext->OMSetDepthStencilState(depthStencilState_drawMask.Get(), 0);
+	deviceContext->IASetInputLayout(vertexshader_2d.GetInputLayout());
+	deviceContext->PSSetShader(nullptr, NULL, 0); // pixelshader_2d.GetShader()
+	deviceContext->VSSetShader(vertexshader_2d.GetShader(), NULL, 0);
+	sprite.Draw(camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix());
+
+	deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
+	deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
+	deviceContext->IASetInputLayout(vertexshader.GetInputLayout());
+	deviceContext->OMSetDepthStencilState(depthStencilState.Get(), 0); // depthStencilState_applyMask.Get()
 
 	{
 		this->gameObject.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
@@ -91,11 +97,6 @@ void GenGraphics::RenderFrame()
 		fpsTimer.Mark();
 	}
 	//OutputDebugStringA(fpsString.c_str());
-
-	deviceContext->IASetInputLayout(vertexshader_2d.GetInputLayout());
-	deviceContext->PSSetShader(pixelshader_2d.GetShader(), NULL, 0);
-	deviceContext->VSSetShader(vertexshader_2d.GetShader(), NULL, 0);
-	sprite.Draw(camera2D.GetWorldMatrix() * camera2D.GetOrthoMatrix());
 
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
@@ -219,59 +220,60 @@ bool GenGraphics::InitializeDirectX(HWND hwnd)
 	this->deviceContext->OMSetRenderTargets(1, this->renderTargetView.GetAddressOf(), this->depthStencilView.Get());
 
 	//Create depth stencil state
-	D3D11_DEPTH_STENCIL_DESC depthstencildesc;
-	ZeroMemory(&depthstencildesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-
-	depthstencildesc.DepthEnable = true;
-	depthstencildesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+	CD3D11_DEPTH_STENCIL_DESC depthstencildesc(D3D11_DEFAULT);
 	depthstencildesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
 
 	hr = this->device->CreateDepthStencilState(&depthstencildesc, this->depthStencilState.GetAddressOf());
-	if (FAILED(hr))
-	{
-		GenLogger::Error(hr, "Failed to create depth stencil state.");
-		return false;
-	}
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create depth stencil state.");
 
-	//Create the Viewport
-	D3D11_VIEWPORT viewport;
-	ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+	CD3D11_DEPTH_STENCIL_DESC depthstencildesc_drawMask(D3D11_DEFAULT);
+	depthstencildesc_drawMask.DepthEnable = FALSE;
+	depthstencildesc_drawMask.StencilEnable = TRUE;
 
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = windowWidth;
-	viewport.Height = windowHeight;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	depthstencildesc_drawMask.BackFace.StencilFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_NEVER;
+	depthstencildesc_drawMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_drawMask.BackFace.StencilFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_drawMask.BackFace.StencilPassOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
 
-	//Set the Viewport
+	depthstencildesc_drawMask.FrontFace.StencilFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_ALWAYS;
+	depthstencildesc_drawMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_drawMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_drawMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_INCR_SAT;
+
+	hr = this->device->CreateDepthStencilState(&depthstencildesc_drawMask, this->depthStencilState_drawMask.GetAddressOf());
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create depth stencil state for drawing mask.");
+
+	CD3D11_DEPTH_STENCIL_DESC depthstencildesc_applyMask(D3D11_DEFAULT);
+	depthstencildesc_applyMask.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
+	depthstencildesc_applyMask.StencilEnable = TRUE;
+
+	depthstencildesc_applyMask.BackFace.StencilFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_NEVER;
+	depthstencildesc_applyMask.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_applyMask.BackFace.StencilFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_applyMask.BackFace.StencilPassOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+
+	depthstencildesc_applyMask.FrontFace.StencilFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
+	depthstencildesc_applyMask.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_applyMask.FrontFace.StencilFailOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+	depthstencildesc_applyMask.FrontFace.StencilPassOp = D3D11_STENCIL_OP::D3D11_STENCIL_OP_KEEP;
+
+	hr = this->device->CreateDepthStencilState(&depthstencildesc_applyMask, this->depthStencilState_applyMask.GetAddressOf());
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create depth stencil state for applying mask.");
+
+	//Create & set the Viewport
+	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(this->windowWidth), static_cast<float>(this->windowHeight));;
 	this->deviceContext->RSSetViewports(1, &viewport);
 
 	//Create Rasterizer State
-	D3D11_RASTERIZER_DESC rasterizerDesc;
-	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-
-	rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+	CD3D11_RASTERIZER_DESC rasterizerDesc(D3D11_DEFAULT);
 	hr = this->device->CreateRasterizerState(&rasterizerDesc, this->rasterizerState.GetAddressOf());
-	if (FAILED(hr))
-	{
-		GenLogger::Error(hr, "Failed to create rasterizer state.");
-		return false;
-	}
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create rasterizer state.");
 
 	//Create Rasterizer State for culling front
-	D3D11_RASTERIZER_DESC rasterizerDesc_CullFront;
-	ZeroMemory(&rasterizerDesc_CullFront, sizeof(D3D11_RASTERIZER_DESC));
-
-	rasterizerDesc_CullFront.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	CD3D11_RASTERIZER_DESC rasterizerDesc_CullFront(D3D11_DEFAULT);
 	rasterizerDesc_CullFront.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
 	hr = this->device->CreateRasterizerState(&rasterizerDesc_CullFront, this->rasterizerState_CullFront.GetAddressOf());
-	if (FAILED(hr))
-	{
-		GenLogger::Error(hr, "Failed to create rasterizer state.");
-		return false;
-	}
+	GENWND_ERROR_IF_FAILED(hr, "Failed to create rasterizer state.");
 
 	//Create Blend State
 	D3D11_BLEND_DESC blendDesc;
@@ -403,6 +405,8 @@ bool GenGraphics::InitializeScene()
 
 		if (!sprite.Initialize(this->device.Get(), this->deviceContext.Get(), 256, 256, "./Data/sprite_256x256.png", cb_vs_vertexshader_2d))
 			return false;
+
+		sprite.SetPosition(XMFLOAT3(windowWidth / 2 - sprite.GetWidth() / 2, windowHeight / 2 - sprite.GetHeight() / 2, 0.0f));
 
 		camera2D.SetProjectionValues(windowWidth, windowHeight, 0.0f, 1.0f);
 
