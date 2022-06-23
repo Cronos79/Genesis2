@@ -11,10 +11,6 @@
 class GameObject
 {
 public:
-	bool Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader);
-
-	void Draw(const XMMATRIX& viewProjectionMatrix);
-
 	const XMVECTOR& GetPositionVector() const;
 	const XMFLOAT3& GetPositionFloat3() const;
 	const XMVECTOR& GetRotationVector() const;
@@ -32,31 +28,16 @@ public:
 	void AdjustRotation(const XMVECTOR& rot);
 	void AdjustRotation(const XMFLOAT3& rot);
 	void AdjustRotation(float x, float y, float z);
-	void SetLookAtPos(XMFLOAT3 lookAtPos);
-	const XMVECTOR& GetForwardVector();
-	const XMVECTOR& GetRightVector();
-	const XMVECTOR& GetBackwardVector();
-	const XMVECTOR& GetLeftVector();
-private:
-	GenModel model;
-	void UpdateWorldMatrix();
+	void SetScale(float xScale, float yScale, float zScale = 1.0f);
 
-	XMMATRIX worldMatrix = XMMatrixIdentity();
+protected:
+	virtual void UpdateMatrix();
 
 	XMVECTOR posVector;
 	XMVECTOR rotVector;
 	XMFLOAT3 pos;
 	XMFLOAT3 rot;
 
-	const XMVECTOR DEFAULT_FORWARD_VECTOR = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-	const XMVECTOR DEFAULT_UP_VECTOR = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	const XMVECTOR DEFAULT_BACKWARD_VECTOR = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
-	const XMVECTOR DEFAULT_LEFT_VECTOR = XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
-	const XMVECTOR DEFAULT_RIGHT_VECTOR = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-
-	XMVECTOR vec_forward;
-	XMVECTOR vec_left;
-	XMVECTOR vec_right;
-	XMVECTOR vec_backward;
+	XMFLOAT3 scale;
 };
 

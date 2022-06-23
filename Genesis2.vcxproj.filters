@@ -31,12 +31,6 @@
     <Filter Include="Source\Header Files\Utility">
       <UniqueIdentifier>{a87cbd49-d79f-4080-915a-cf913f6fbdf8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Header Files\Game">
-      <UniqueIdentifier>{d63afd59-fd78-44dd-9eb9-458691d34f43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Source Files\Game">
-      <UniqueIdentifier>{c0e2f004-aa25-4484-9294-76d3dff1a042}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Header Files\Graphics">
       <UniqueIdentifier>{65512e3c-6430-4be1-9ddb-bc0a9aa7837d}</UniqueIdentifier>
     </Filter>
@@ -51,6 +45,18 @@
     </Filter>
     <Filter Include="Source\Header Files\Graphics\Imgui">
       <UniqueIdentifier>{ffedf7f5-2205-4478-a193-917a4ce6528a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\GameBase">
+      <UniqueIdentifier>{c0e2f004-aa25-4484-9294-76d3dff1a042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\GameBase">
+      <UniqueIdentifier>{d63afd59-fd78-44dd-9eb9-458691d34f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Game">
+      <UniqueIdentifier>{23673222-129e-468d-9bb6-b76a34fd9a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game">
+      <UniqueIdentifier>{dddfebc9-c9d2-4002-b8bb-27ea23300f47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +74,7 @@
     <None Include="README.md">
       <Filter>Misc</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\WinEntry.cpp">
@@ -96,9 +103,6 @@
     </ClCompile>
     <ClCompile Include="Source\GenTimer.cpp">
       <Filter>Source\Source Files\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Genesis.cpp">
-      <Filter>Source\Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenGraphics.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
@@ -137,12 +141,36 @@
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameObject.cpp">
-      <Filter>Source\Source Files\Game</Filter>
+      <Filter>Source\Source Files\GameBase</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenColor.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenTexture.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenLight.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenGameObject2d.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenGameObject3d.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenGameObject.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenCamera2D.cpp">
+      <Filter>Source\Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Genesis.cpp">
+      <Filter>Source\Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenLevel.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenSprite.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,9 +207,6 @@
     </ClInclude>
     <ClInclude Include="Source\GenTimer.h">
       <Filter>Source\Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Genesis.h">
-      <Filter>Source\Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenGraphics.h">
       <Filter>Source\Header Files\Graphics</Filter>
@@ -241,12 +266,36 @@
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameObject.h">
-      <Filter>Source\Header Files\Game</Filter>
+      <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenColor.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenTexture.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenLight.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGameObject2d.h">
+      <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGameObject3d.h">
+      <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenGameObject.h">
+      <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenCamera2D.h">
+      <Filter>Source\Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Genesis.h">
+      <Filter>Source\Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenLevel.h">
+      <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenSprite.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
@@ -265,6 +314,15 @@
       <Filter>Source\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\PixelShader.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_nolight.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\VertexShader_2d.hlsl">
+      <Filter>Source\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_2d.hlsl">
       <Filter>Source\Shaders</Filter>
     </FxCompile>
   </ItemGroup>

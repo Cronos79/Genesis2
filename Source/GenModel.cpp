@@ -31,20 +31,22 @@ bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3
 
 void GenModel::Draw(const XMMATRIX& worldMatrix, const XMMATRIX& viewProjectionMatrix)
 {
-	//Update Constant buffer with WVP Matrix
-	this->cb_vs_vertexshader->data.mat = worldMatrix * viewProjectionMatrix; //Calculate World-View-Projection Matrix
-	this->cb_vs_vertexshader->data.mat = XMMatrixTranspose(this->cb_vs_vertexshader->data.mat);
-	this->cb_vs_vertexshader->ApplyChanges();
 	this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader->GetAddressOf());
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
+		//Update Constant buffer with WVP Matrix
+		this->cb_vs_vertexshader->data.wvpMatrix = meshes[i].GetTransformMatrix() * worldMatrix * viewProjectionMatrix; //Calculate World-View-Projection Matrix
+		this->cb_vs_vertexshader->data.worldMatrix = meshes[i].GetTransformMatrix() * worldMatrix; //Calculate World
+		this->cb_vs_vertexshader->ApplyChanges();
 		meshes[i].Draw();
 	}
 }
 
 bool GenModel::LoadModel(const std::string& filePath)
 {
+	this->directory = FunctionLib::GetDirectoryFromPath(filePath);
+
 	Assimp::Importer importer;
 
 	const aiScene* pScene = importer.ReadFile(filePath,
@@ -54,25 +56,27 @@ bool GenModel::LoadModel(const std::string& filePath)
 	if (pScene == nullptr)
 		return false;
 
-	this->ProcessNode(pScene->mRootNode, pScene);
+	this->ProcessNode(pScene->mRootNode, pScene, DirectX::XMMatrixIdentity());
 	return true;
 }
 
-void GenModel::ProcessNode(aiNode* node, const aiScene* scene)
+void GenModel::ProcessNode(aiNode* node, const aiScene* scene, const XMMATRIX& parentTransformMatrix)
 {
+	XMMATRIX nodeTransformMatrix = XMMatrixTranspose(XMMATRIX(&node->mTransformation.a1)) * parentTransformMatrix;
+
 	for (UINT i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(this->ProcessMesh(mesh, scene));
+		meshes.push_back(this->ProcessMesh(mesh, scene, nodeTransformMatrix));
 	}
 
 	for (UINT i = 0; i < node->mNumChildren; i++)
 	{
-		this->ProcessNode(node->mChildren[i], scene);
+		this->ProcessNode(node->mChildren[i], scene, nodeTransformMatrix);
 	}
 }
 
-GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene, const XMMATRIX& transformMatrix)
 {
 	// Data to fill
 	std::vector<Vertex> vertices;
@@ -86,6 +90,10 @@ GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.pos.x = mesh->mVertices[i].x;
 		vertex.pos.y = mesh->mVertices[i].y;
 		vertex.pos.z = mesh->mVertices[i].z;
+
+		vertex.normal.x = mesh->mNormals[i].x;
+		vertex.normal.y = mesh->mNormals[i].y;
+		vertex.normal.z = mesh->mNormals[i].z;
 
 		if (mesh->mTextureCoords[0])
 		{
@@ -110,7 +118,50 @@ GenMesh GenModel::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<GenTexture> diffuseTextures = LoadMaterialTextures(material, aiTextureType::aiTextureType_DIFFUSE, scene);
 	textures.insert(textures.end(), diffuseTextures.begin(), diffuseTextures.end());
 
-	return GenMesh(this->device, this->deviceContext, vertices, indices, textures);
+	return GenMesh(this->device, this->deviceContext, vertices, indices, textures, transformMatrix);
+}
+
+TextureStorageType GenModel::DetermineTextureStorageType(const aiScene* pScene, aiMaterial* pMat, unsigned int index, aiTextureType textureType)
+{
+	if (pMat->GetTextureCount(textureType) == 0)
+		return TextureStorageType::None;
+
+	aiString path;
+	pMat->GetTexture(textureType, index, &path);
+	std::string texturePath = path.C_Str();
+	//Check if texture is an embedded indexed texture by seeing if the file path is an index #
+	if (texturePath[0] == '*')
+	{
+		if (pScene->mTextures[0]->mHeight == 0)
+		{
+			return TextureStorageType::EmbeddedIndexCompressed;
+		}
+		else
+		{
+			assert("SUPPORT DOES NOT EXIST YET FOR INDEXED NON COMPRESSED TEXTURES!" && 0);
+			return TextureStorageType::EmbeddedIndexNonCompressed;
+		}
+	}
+	//Check if texture is an embedded texture but not indexed (path will be the texture's name instead of #)
+	if (auto pTex = pScene->GetEmbeddedTexture(texturePath.c_str()))
+	{
+		if (pTex->mHeight == 0)
+		{
+			return TextureStorageType::EmbeddedCompressed;
+		}
+		else
+		{
+			assert("SUPPORT DOES NOT EXIST YET FOR EMBEDDED NON COMPRESSED TEXTURES!" && 0);
+			return TextureStorageType::EmbeddedNonCompressed;
+		}
+	}
+	//Lastly check if texture is a filepath by checking for period before extension name
+	if (texturePath.find('.') != std::string::npos)
+	{
+		return TextureStorageType::Disk;
+	}
+
+	return TextureStorageType::None; // No texture exists
 }
 
 std::vector<GenTexture> GenModel::LoadMaterialTextures(aiMaterial* pMaterial, aiTextureType textureType, const aiScene* pScene)
@@ -138,7 +189,53 @@ std::vector<GenTexture> GenModel::LoadMaterialTextures(aiMaterial* pMaterial, ai
 	}
 	else
 	{
-		materialTextures.push_back(GenTexture(this->device, Colors::UnhandledTextureColor, aiTextureType::aiTextureType_DIFFUSE));
-		return materialTextures;
+		for (UINT i = 0; i < textureCount; i++)
+		{
+			aiString path;
+			pMaterial->GetTexture(textureType, i, &path);
+			TextureStorageType storetype = DetermineTextureStorageType(pScene, pMaterial, i, textureType);
+			switch (storetype)
+			{
+			case TextureStorageType::EmbeddedIndexCompressed:
+			{
+				int index = GetTextureIndex(&path);
+				GenTexture embeddedIndexedTexture(this->device,
+					reinterpret_cast<uint8_t*>(pScene->mTextures[index]->pcData),
+					pScene->mTextures[index]->mWidth,
+					textureType);
+				materialTextures.push_back(embeddedIndexedTexture);
+				break;
+			}
+			case TextureStorageType::EmbeddedCompressed:
+			{
+				const aiTexture* pTexture = pScene->GetEmbeddedTexture(path.C_Str());
+				GenTexture embeddedTexture(this->device,
+					reinterpret_cast<uint8_t*>(pTexture->pcData),
+					pTexture->mWidth,
+					textureType);
+				materialTextures.push_back(embeddedTexture);
+				break;
+			}
+			case TextureStorageType::Disk:
+			{
+				std::string filename = this->directory + '\\' + path.C_Str();
+				GenTexture diskTexture(this->device, filename, textureType);
+				materialTextures.push_back(diskTexture);
+				break;
+			}
+			}
+		}
 	}
+
+	if (materialTextures.size() == 0)
+	{
+		materialTextures.push_back(GenTexture(this->device, Colors::UnhandledTextureColor, aiTextureType::aiTextureType_DIFFUSE));
+	}
+	return materialTextures;
+}
+
+int GenModel::GetTextureIndex(aiString* pStr)
+{
+	assert(pStr->length >= 2);
+	return atoi(&pStr->C_Str()[1]);
 }

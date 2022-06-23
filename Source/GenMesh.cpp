@@ -8,10 +8,11 @@
 #include "GenMesh.h"
 #include "GenMacros.h"
 
-GenMesh::GenMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<Vertex>& vertices, std::vector<DWORD>& indices, std::vector<GenTexture>& textures)
+GenMesh::GenMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext, std::vector<Vertex>& vertices, std::vector<DWORD>& indices, std::vector<GenTexture>& textures, const DirectX::XMMATRIX& transformMatrix)
 {
 	this->deviceContext = deviceContext;
 	this->textures = textures;
+	this->transformMatrix = transformMatrix;
 
 	HRESULT hr = this->vertexbuffer.Initialize(device, vertices.data(), vertices.size());
 	GENWND_ERROR_IF_FAILED(hr, "Failed to initialize vertex buffer for mesh.");
@@ -26,6 +27,7 @@ GenMesh::GenMesh(const GenMesh& mesh)
 	this->indexbuffer = mesh.indexbuffer;
 	this->vertexbuffer = mesh.vertexbuffer;
 	this->textures = mesh.textures;
+	this->transformMatrix = mesh.transformMatrix;
 }
 
 void GenMesh::Draw()
@@ -44,4 +46,9 @@ void GenMesh::Draw()
 	this->deviceContext->IASetVertexBuffers(0, 1, this->vertexbuffer.GetAddressOf(), this->vertexbuffer.StridePtr(), &offset);
 	this->deviceContext->IASetIndexBuffer(this->indexbuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
 	this->deviceContext->DrawIndexed(this->indexbuffer.IndexCount(), 0, 0);
+}
+
+const DirectX::XMMATRIX& GenMesh::GetTransformMatrix()
+{
+	return transformMatrix;
 }

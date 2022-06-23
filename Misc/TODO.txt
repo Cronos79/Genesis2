@@ -10,10 +10,8 @@
 TODO List
 	- file io
 	- xinput
-	- dx11	
 	- xaudio2
 	- ui
-	-- test ui
 	-- real ui
 	- start game code
 

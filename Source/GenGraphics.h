@@ -21,7 +21,10 @@
 #include "ImGUI\\imgui.h"
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
-#include "GameObject.h"
+#include "GenGameObject.h"
+#include "GenLight.h"
+#include "GenCamera2D.h"
+#include "GenSprite.h"
 
 class GenGraphics
 {
@@ -32,7 +35,10 @@ public:
 	bool Initialize(HWND hwnd, int width, int height);
 	void RenderFrame();
 	GenCamera camera;
-	GameObject gameObject;
+	GenCamera2D camera2D;
+	GenSprite sprite;
+	GenGameObject gameObject;
+	GenLight light;
 private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
@@ -42,18 +48,21 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapchain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
-
 	
-
+	VertexShader vertexshader_2d;
 	VertexShader vertexshader;
+	PixelShader pixelshader_2d;
 	PixelShader pixelshader;
-
+	PixelShader pixelshader_nolight;
+	ConstantBuffer<CB_VS_vertexshader_2d> cb_vs_vertexshader_2d;
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
-	ConstantBuffer<CB_PS_pixelshader> cb_ps_pixelshader;
+	ConstantBuffer<CB_PS_light> cb_ps_light;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState_drawMask;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState_applyMask;
 
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_CullFront;

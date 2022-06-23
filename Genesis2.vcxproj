@@ -59,7 +59,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -95,13 +95,20 @@
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
+    <ClCompile Include="Source\GenCamera2D.cpp" />
     <ClCompile Include="Source\GenColor.cpp" />
     <ClCompile Include="Source\Genesis.cpp" />
     <ClCompile Include="Source\GenException.cpp" />
+    <ClCompile Include="Source\GenGameObject.cpp" />
+    <ClCompile Include="Source\GenGameObject2d.cpp" />
+    <ClCompile Include="Source\GenGameObject3d.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
+    <ClCompile Include="Source\GenLevel.cpp" />
+    <ClCompile Include="Source\GenLight.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
     <ClCompile Include="Source\GenMesh.cpp" />
     <ClCompile Include="Source\GenModel.cpp" />
+    <ClCompile Include="Source\GenSprite.cpp" />
     <ClCompile Include="Source\GenTexture.cpp" />
     <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
@@ -122,6 +129,7 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include="LICENSE.md" />
+    <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +139,15 @@
     <ClInclude Include="Source\ConstantBufferTypes.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\GenCamera.h" />
+    <ClInclude Include="Source\GenCamera2D.h" />
     <ClInclude Include="Source\GenColor.h" />
     <ClInclude Include="Source\Genesis.h" />
+    <ClInclude Include="Source\GenGameObject.h" />
+    <ClInclude Include="Source\GenGameObject2d.h" />
+    <ClInclude Include="Source\GenGameObject3d.h" />
     <ClInclude Include="Source\GenGraphics.h" />
+    <ClInclude Include="Source\GenLevel.h" />
+    <ClInclude Include="Source\GenLight.h" />
     <ClInclude Include="Source\GenMacros.h" />
     <ClInclude Include="Source\FunctionLib.h" />
     <ClInclude Include="Source\GenApp.h" />
@@ -141,6 +155,7 @@
     <ClInclude Include="Source\GenLogger.h" />
     <ClInclude Include="Source\GenMesh.h" />
     <ClInclude Include="Source\GenModel.h" />
+    <ClInclude Include="Source\GenSprite.h" />
     <ClInclude Include="Source\GenTexture.h" />
     <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
@@ -173,7 +188,25 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_2d.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader_nolight.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\VertexShader_2d.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -181,5 +214,15 @@
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.XAudio2.Redist.1.2.8\build\native\Microsoft.XAudio2.Redist.targets" Condition="Exists('packages\Microsoft.XAudio2.Redist.1.2.8\build\native\Microsoft.XAudio2.Redist.targets')" />
+    <Import Project="packages\directxtk_desktop_2019.2022.5.10.4\build\native\directxtk_desktop_2019.targets" Condition="Exists('packages\directxtk_desktop_2019.2022.5.10.4\build\native\directxtk_desktop_2019.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.XAudio2.Redist.1.2.8\build\native\Microsoft.XAudio2.Redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.XAudio2.Redist.1.2.8\build\native\Microsoft.XAudio2.Redist.targets'))" />
+    <Error Condition="!Exists('packages\directxtk_desktop_2019.2022.5.10.4\build\native\directxtk_desktop_2019.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\directxtk_desktop_2019.2022.5.10.4\build\native\directxtk_desktop_2019.targets'))" />
+  </Target>
 </Project>

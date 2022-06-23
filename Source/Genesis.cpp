@@ -81,6 +81,13 @@ void Genesis::Update()
 	{
 		_window->Gfx().camera.AdjustPosition(0.0f, -cameraSpeed * dt, 0.0f);
 	}
+	if (_window->kbd.KeyIsPressed('C'))
+	{
+		XMVECTOR lightPosition = _window->Gfx().camera.GetPositionVector();
+		lightPosition += _window->Gfx().camera.GetForwardVector();
+		_window->Gfx().light.SetPosition(lightPosition);
+		_window->Gfx().light.SetRotation(_window->Gfx().camera.GetRotationFloat3());
+	}
 }
 
 void Genesis::Render()
