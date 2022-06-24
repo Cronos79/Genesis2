@@ -33,22 +33,11 @@ public:
 	~GenGraphics();
 public:
 	bool Initialize(HWND hwnd, int width, int height);
-	void RenderFrame();
-	GenCamera camera;
-	GenCamera2D camera2D;
-	GenSprite sprite;
-	GenGameObject gameObject;
-	GenLight light;
+	void RenderFrame();	
 
 private:
 	bool InitializeDirectX(HWND hwnd);
-	bool InitializeScene();
-
 public:
-	ConstantBuffer<CB_VS_vertexshader_2d> cb_vs_vertexshader_2d;
-	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
-	ConstantBuffer<CB_PS_light> cb_ps_light;
-
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> deviceContext;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapchain;

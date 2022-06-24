@@ -20,6 +20,8 @@ public:
 private:
 	void InputHandler(float dt);
 	void ImGuiHandler();
+	void SetupGfx();
+	void SetDefaultShaders();
 	GenTimer* DeltaTime;
 	GenWindow* _window;
 	GenLevel* currentLevel;

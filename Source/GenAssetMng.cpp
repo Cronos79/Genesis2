@@ -6,11 +6,13 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #include "GenAssetMng.h"
+#include "GenMacros.h"
 
 GenAssetMng::GenAssetMng(GenGraphics* gfx)
 	: Gfx(gfx)
 {
 	InitializeShaders();
+	LoadAssets();
 }
 
 GenAssetMng::~GenAssetMng()
@@ -25,8 +27,14 @@ bool GenAssetMng::LoadAssets()
 
 	if (!LoadPixelShaders())
 		return false;
+	
+	if (!InitializeConstantBuffers())
+		return false;
+
+	Test();
 
 	GenLogger::Info("Shaders loaded");
+	assetsLoaded = true;
 	return true;
 }
 
@@ -102,3 +110,76 @@ bool GenAssetMng::LoadPixelShaders()
 	pixelShaders["ps_nolight"] = &pixelshader_nolight;
 	return true;
 }
+
+bool GenAssetMng::InitializeConstantBuffers()
+{
+	try
+	{
+		//Initialize Constant Buffer(s)
+		HRESULT hr = this->cb_vs_vertexshader_2d.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get());
+		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize 2d constant buffer.");
+
+		hr = this->cb_vs_vertexshader.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get());
+		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
+
+		hr = this->cb_ps_light.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get());
+		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
+
+		this->cb_ps_light.data.ambientLightColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
+		this->cb_ps_light.data.ambientLightStrength = 1.0f;		
+	}
+	catch (GenException& exception)
+	{
+		//ErrorLogger::Log(exception);
+		return false;
+	}
+	return true;
+}
+
+bool GenAssetMng::Test()
+{
+	if (!light.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+		return false;
+
+	if (!sprite.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), 256, 256, "./Data/sprite_256x256.png", cb_vs_vertexshader_2d))
+		return false;
+
+	sprite.SetPosition(XMFLOAT3(Gfx->windowWidth / 2 - sprite.GetWidth() / 2, Gfx->windowHeight / 2 - sprite.GetHeight() / 2, 0.0f));
+
+	camera2D.SetProjectionValues(Gfx->windowWidth, Gfx->windowHeight, 0.0f, 1.0f);
+
+	camera.SetPosition(500.0f, 400.0f, -30.0f);
+	camera.SetRotation(45.0f, 0.0f, 0.0f);
+	camera.SetProjectionValues(90.0f, static_cast<float>(Gfx->windowWidth) / static_cast<float>(Gfx->windowHeight), 0.1f, 1000.0f);
+}
+
+bool GenAssetMng::LoadGameObject(std::string name)
+{
+	if (Gfx)
+	{		
+		loadedGameObjects3d[name] = new GenGameObject();
+		std::string delimiter = "_";
+		std::string token = name.substr(0, name.find(delimiter));
+		std::string path = ".\\Data\\" + token + ".fbx";
+		if (!loadedGameObjects3d[name]->Initialize(path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+	return true;
+}
+
+GenGameObject* GenAssetMng::GetGameObject(std::string name)
+{
+	GenGameObject* temp = loadedGameObjects3d[name];
+	if (!temp)
+	{
+		LoadGameObject(name);
+		temp = loadedGameObjects3d[name];
+		
+	}
+	return temp;
+}
+

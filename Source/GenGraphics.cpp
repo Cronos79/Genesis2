@@ -29,9 +29,6 @@ bool GenGraphics::Initialize(HWND hwnd, int width, int height)
 	if (!InitializeDirectX(hwnd))
 		return false;
 
-	if (!InitializeScene())
-		return false;
-
 	//Setup ImGui
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -245,43 +242,4 @@ bool GenGraphics::InitializeDirectX(HWND hwnd)
 	return true;
 }
 
-bool GenGraphics::InitializeScene()
-{
-	try
-	{
-		//Initialize Constant Buffer(s)
-		HRESULT hr = this->cb_vs_vertexshader_2d.Initialize(this->device.Get(), this->deviceContext.Get());
-		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize 2d constant buffer.");
 
-		hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
-		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-
-		hr = this->cb_ps_light.Initialize(this->device.Get(), this->deviceContext.Get());
-		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-
-		this->cb_ps_light.data.ambientLightColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
-		this->cb_ps_light.data.ambientLightStrength = 1.0f;
-		
-		if (!gameObject.Initialize(".\\Data\\Cube.fbx", this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
-			return false;
-
-		if (!light.Initialize(this->device.Get(), this->deviceContext.Get(), this->cb_vs_vertexshader))
-			return false;
-
-		if (!sprite.Initialize(this->device.Get(), this->deviceContext.Get(), 256, 256, "./Data/sprite_256x256.png", cb_vs_vertexshader_2d))
-			return false;
-
-		sprite.SetPosition(XMFLOAT3(windowWidth / 2 - sprite.GetWidth() / 2, windowHeight / 2 - sprite.GetHeight() / 2, 0.0f));
-
-		camera2D.SetProjectionValues(windowWidth, windowHeight, 0.0f, 1.0f);
-
-		camera.SetPosition(0.0f, 0.0f, -200.0f);
-		camera.SetProjectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);
-	}
-	catch (GenException& exception)
-	{
-		//ErrorLogger::Log(exception);
-		return false;
-	}
-	return true;
-}

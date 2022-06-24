@@ -9,6 +9,7 @@
 #include "GenMacros.h"
 #include "GenTexture.h"
 
+static bool isInit = false;
 bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader)
 {
 	this->device = device;
@@ -26,21 +27,25 @@ bool GenModel::Initialize(const std::string& filePath, ID3D11Device* device, ID3
 		return false;
 	}
 
+	isInit = true;
 	return true;
 }
 
 void GenModel::Draw(const XMMATRIX& worldMatrix, const XMMATRIX& viewProjectionMatrix)
 {
-	this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader->GetAddressOf());
-
-	for (int i = 0; i < meshes.size(); i++)
+	if (isInit && deviceContext != nullptr)
 	{
-		//Update Constant buffer with WVP Matrix
-		this->cb_vs_vertexshader->data.wvpMatrix = meshes[i].GetTransformMatrix() * worldMatrix * viewProjectionMatrix; //Calculate World-View-Projection Matrix
-		this->cb_vs_vertexshader->data.worldMatrix = meshes[i].GetTransformMatrix() * worldMatrix; //Calculate World
-		this->cb_vs_vertexshader->ApplyChanges();
-		meshes[i].Draw();
-	}
+		this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader->GetAddressOf());
+
+		for (int i = 0; i < meshes.size(); i++)
+		{
+			//Update Constant buffer with WVP Matrix
+			this->cb_vs_vertexshader->data.wvpMatrix = meshes[i].GetTransformMatrix() * worldMatrix * viewProjectionMatrix; //Calculate World-View-Projection Matrix
+			this->cb_vs_vertexshader->data.worldMatrix = meshes[i].GetTransformMatrix() * worldMatrix; //Calculate World
+			this->cb_vs_vertexshader->ApplyChanges();
+			meshes[i].Draw();
+		}
+	}	
 }
 
 bool GenModel::LoadModel(const std::string& filePath)
