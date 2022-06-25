@@ -7,6 +7,7 @@
    ======================================================================== */
 #include "GenAssetMng.h"
 #include "GenMacros.h"
+#include "GenPointLight.h"
 
 GenAssetMng::GenAssetMng(GenGraphics* gfx)
 	: Gfx(gfx)
@@ -172,7 +173,34 @@ GenGameObject* GenAssetMng::GetGameObject(std::string name)
 	{
 		LoadGameObject(name);
 		temp = loadedGameObjects3d[name];
-		
+
+	}
+	return temp;
+}
+
+
+bool GenAssetMng::LoadPointLight(std::string name)
+{
+	if (Gfx)
+	{
+		loadedPointLights[name] = new GenPointLight();;
+		if (!loadedPointLights[name]->Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+	return true;
+}
+
+GenPointLight* GenAssetMng::GetPointLight(std::string name)
+{
+	GenPointLight* temp = loadedPointLights[name];
+	if (!temp)
+	{
+		LoadPointLight(name);
+		temp = loadedPointLights[name];
 	}
 	return temp;
 }

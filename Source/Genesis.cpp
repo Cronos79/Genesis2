@@ -44,12 +44,12 @@ void Genesis::Update()
 		}				
 	}
 
-	// Light
+	// PointLight
 	{
-		currentLevel->assetMng->light.SetConstantBuffers(&_window->Gfx());
-		currentLevel->assetMng->light.SetPosition(500.0f, 350.0f, 500.0f);
+		currentLevel->assetMng->GetPointLight("pl1")->SetConstantBuffers(&_window->Gfx());
+		currentLevel->assetMng->GetPointLight("pl1")->SetPosition(500.0f, 350.0f, 500.0f);
 		_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0);
-		currentLevel->assetMng->light.Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
+		currentLevel->assetMng->GetPointLight("pl1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
 	}
 
 	
@@ -106,11 +106,11 @@ void Genesis::ImGuiHandler()
 	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->light.ambientLightStrength, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::NewLine();
-	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->light.lightColor.x, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Strength", &currentLevel->assetMng->light.lightStrength, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation A", &currentLevel->assetMng->light.attenuation_a, 0.01f, 0.1f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation B", &currentLevel->assetMng->light.attenuation_b, 0.01f, 0.0f, 10.0f);
-	ImGui::DragFloat("Dynamic Light Attenuation C", &currentLevel->assetMng->light.attenuation_c, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->GetPointLight("pl1")->lightColor.x, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Strength", &currentLevel->assetMng->GetPointLight("pl1")->lightStrength, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation A", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_a, 0.01f, 0.1f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation B", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_b, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation C", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_c, 0.01f, 0.0f, 10.0f);
 	ImGui::End();
 	//Assemble Together Draw Data
 	ImGui::Render();

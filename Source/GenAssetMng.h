@@ -13,6 +13,7 @@
 #include "GenGraphics.h"
 #include "ConstantBuffer.h"
 #include "GenLight.h"
+#include "GenPointLight.h"
 using namespace std;
 
 class GenAssetMng
@@ -22,10 +23,12 @@ public:
 	~GenAssetMng();
 	bool LoadAssets();	
 	GenGameObject* GetGameObject(std::string name);
+	GenPointLight* GetPointLight(std::string name);
 	map<std::string, VertexShader*> vertexShaders;
 	map<std::string, PixelShader*> pixelShaders;
 	ConstantBuffer<CB_VS_vertexshader_2d> cb_vs_vertexshader_2d;
 	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;	
+	// Temp
 	GenCamera camera;
 	GenCamera2D camera2D;
 	GenSprite sprite;
@@ -39,8 +42,10 @@ private:
 	bool InitializeConstantBuffers();
 	bool Test();
 	bool LoadGameObject(std::string name);
+	bool LoadPointLight(std::string name);
 
 	map<std::string, GenGameObject*> loadedGameObjects3d;
+	map<std::string, GenPointLight*> loadedPointLights;
 
 	GenGraphics* Gfx;
 	VertexShader vertexshader_2d;

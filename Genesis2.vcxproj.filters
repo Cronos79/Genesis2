@@ -58,6 +58,18 @@
     <Filter Include="Source\Source Files\Game">
       <UniqueIdentifier>{dddfebc9-c9d2-4002-b8bb-27ea23300f47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Header Files\Game\World">
+      <UniqueIdentifier>{514158dc-46a9-4242-bbe9-7d8e1a0ce9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Game\Assets">
+      <UniqueIdentifier>{806ef18d-bb79-4e05-b537-cec010fe3482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game\Assets">
+      <UniqueIdentifier>{7e88ef0d-1333-49f6-8cb1-ddc85604d687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game\World">
+      <UniqueIdentifier>{2d622f44-2452-45d3-aacd-02abbbefb4bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -149,9 +161,6 @@
     <ClCompile Include="Source\GenTexture.cpp">
       <Filter>Source\Source Files\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GenLight.cpp">
-      <Filter>Source\Source Files\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GenGameObject2d.cpp">
       <Filter>Source\Source Files\GameBase</Filter>
     </ClCompile>
@@ -175,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="Source\GenAssetMng.cpp">
       <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenLight.cpp">
+      <Filter>Source\Source Files\Game\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenPointLight.cpp">
+      <Filter>Source\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,9 +292,6 @@
     <ClInclude Include="Source\GenTexture.h">
       <Filter>Source\Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GenLight.h">
-      <Filter>Source\Header Files\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GenGameObject2d.h">
       <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
@@ -303,6 +315,12 @@
     </ClInclude>
     <ClInclude Include="Source\GenAssetMng.h">
       <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenLight.h">
+      <Filter>Source\Header Files\Game\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenPointLight.h">
+      <Filter>Source\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
