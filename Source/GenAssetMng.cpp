@@ -133,9 +133,6 @@ bool GenAssetMng::InitializeConstantBuffers()
 
 bool GenAssetMng::Test()
 {
-	if (!light.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
-		return false;
-
 	if (!sprite.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), 256, 256, "./Data/sprite_256x256.png", cb_vs_vertexshader_2d))
 		return false;
 
@@ -201,6 +198,32 @@ GenPointLight* GenAssetMng::GetPointLight(std::string name)
 	{
 		LoadPointLight(name);
 		temp = loadedPointLights[name];
+	}
+	return temp;
+}
+
+bool GenAssetMng::LoadAmbibntLight(std::string name)
+{
+	if (Gfx)
+	{
+		loadedAmbibntLights[name] = new GenAmbibntLight();;
+		if (!loadedAmbibntLights[name]->Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+			return false;
+	}
+	else
+	{
+		return false;
+	}
+	return true;
+}
+
+GenAmbibntLight* GenAssetMng::GetAmbibntLight(std::string name)
+{
+	GenAmbibntLight* temp = loadedAmbibntLights[name];
+	if (!temp)
+	{
+		LoadAmbibntLight(name);
+		temp = loadedAmbibntLights[name];
 	}
 	return temp;
 }

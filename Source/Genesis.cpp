@@ -44,16 +44,19 @@ void Genesis::Update()
 		}				
 	}
 
+
 	// PointLight
 	{
 		currentLevel->assetMng->GetPointLight("pl1")->SetConstantBuffers(&_window->Gfx());
 		currentLevel->assetMng->GetPointLight("pl1")->SetPosition(500.0f, 350.0f, 500.0f);
-		_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0);
 		currentLevel->assetMng->GetPointLight("pl1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
 	}
-
-	
-
+	// Ambient light
+	{
+		currentLevel->assetMng->GetAmbibntLight("al1")->SetConstantBuffers(&_window->Gfx());
+		//currentLevel->assetMng->GetAmbibntLight("al1")->SetPosition(500.0f, 450.0f, 500.0f);
+		currentLevel->assetMng->GetAmbibntLight("al1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
+	}
 	//_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState_drawMask.Get(), 0);
 	//_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_2d"]->GetInputLayout());
 	//_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0); // pixelshader_2d.GetShader()
@@ -93,7 +96,6 @@ void Genesis::ImGuiHandler()
 		fpsCounter = 0;
 		_window->Gfx().fpsTimer.Mark();
 	}
-	//OutputDebugStringA(fpsString.c_str());
 	
 	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
@@ -102,8 +104,8 @@ void Genesis::ImGuiHandler()
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
 	ImGui::Text(fpsString.c_str());
-	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->light.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->light.ambientLightStrength, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->GetAmbibntLight("al1")->ambientLightColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->GetAmbibntLight("al1")->ambientLightStrength, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::NewLine();
 	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->GetPointLight("pl1")->lightColor.x, 0.01f, 0.0f, 10.0f);
@@ -197,7 +199,7 @@ void Genesis::InputHandler(float dt)
 	{
 		XMVECTOR lightPosition = currentLevel->assetMng->camera.GetPositionVector();
 		lightPosition += currentLevel->assetMng->camera.GetForwardVector();
-		currentLevel->assetMng->light.SetPosition(lightPosition);
-		currentLevel->assetMng->light.SetRotation(currentLevel->assetMng->camera.GetRotationFloat3());
+		currentLevel->assetMng->GetPointLight("pl1")->SetPosition(lightPosition);
+		currentLevel->assetMng->GetPointLight("pl1")->SetRotation(currentLevel->assetMng->camera.GetRotationFloat3());
 	}
 }

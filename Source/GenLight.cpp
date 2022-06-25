@@ -14,10 +14,5 @@ bool GenLight::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceConte
 
 void GenLight::SetConstantBuffers(GenGraphics* gfx)
 {
-	HRESULT hr = this->cb_ps_ambientlight.Initialize(gfx->device.Get(), gfx->deviceContext.Get());
-	GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-	this->cb_ps_ambientlight.data.ambientLightColor = ambientLightColor;
-	this->cb_ps_ambientlight.data.ambientLightStrength = ambientLightStrength; // #TODO: make a seperate light
-	cb_ps_ambientlight.ApplyChanges();
-	gfx->deviceContext->PSSetConstantBuffers(1, 2, cb_ps_ambientlight.GetAddressOf());
+	assert("SetConstantBuffers must be overridden." && 0);
 }

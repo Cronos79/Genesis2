@@ -18,7 +18,5 @@ public:
 	virtual void SetConstantBuffers(GenGraphics* gfx);
 
 
-	DirectX::XMFLOAT3 ambientLightColor = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f);
-	float ambientLightStrength = 1.0f;
-	ConstantBuffer<CB_PS_ambientlight> cb_ps_ambientlight;
+	
 };

@@ -14,6 +14,7 @@
 #include "ConstantBuffer.h"
 #include "GenLight.h"
 #include "GenPointLight.h"
+#include "GenAmbibntLight.h"
 using namespace std;
 
 class GenAssetMng
@@ -24,6 +25,7 @@ public:
 	bool LoadAssets();	
 	GenGameObject* GetGameObject(std::string name);
 	GenPointLight* GetPointLight(std::string name);
+	GenAmbibntLight* GetAmbibntLight(std::string name);
 	map<std::string, VertexShader*> vertexShaders;
 	map<std::string, PixelShader*> pixelShaders;
 	ConstantBuffer<CB_VS_vertexshader_2d> cb_vs_vertexshader_2d;
@@ -32,8 +34,6 @@ public:
 	GenCamera camera;
 	GenCamera2D camera2D;
 	GenSprite sprite;
-	//GenGameObject gameObject;
-	GenLight light;
 	bool assetsLoaded = false;
 private:
 	bool InitializeShaders();
@@ -43,9 +43,11 @@ private:
 	bool Test();
 	bool LoadGameObject(std::string name);
 	bool LoadPointLight(std::string name);
+	bool LoadAmbibntLight(std::string name);
 
 	map<std::string, GenGameObject*> loadedGameObjects3d;
 	map<std::string, GenPointLight*> loadedPointLights;
+	map<std::string, GenAmbibntLight*> loadedAmbibntLights;
 
 	GenGraphics* Gfx;
 	VertexShader vertexshader_2d;
