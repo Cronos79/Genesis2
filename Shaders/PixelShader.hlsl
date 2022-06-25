@@ -1,8 +1,5 @@
 cbuffer lightBuffer : register(b0)
-{
-    float3 ambientLightColor;
-    float ambientLightStrength;
-
+{   
     float3 dynamicLightColor;
     float dynamicLightStrength;
     float3 dynamicLightPosition;
@@ -10,6 +7,12 @@ cbuffer lightBuffer : register(b0)
     float dynamicLightAttenuation_a;
     float dynamicLightAttenuation_b;
     float dynamicLightAttenuation_c;
+}
+
+cbuffer ambientlightBuffer : register(b1)
+{
+    float3 ambientLightColor;
+    float ambientLightStrength;
 }
 
 struct PS_INPUT

@@ -45,15 +45,8 @@ void Genesis::Update()
 	}
 
 	// Light
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightColor = currentLevel->assetMng->light.lightColor;
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightStrength = currentLevel->assetMng->light.lightStrength;
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightPosition = currentLevel->assetMng->light.GetPositionFloat3();
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightAttenuation_a = currentLevel->assetMng->light.attenuation_a;
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightAttenuation_b = currentLevel->assetMng->light.attenuation_b;
-	currentLevel->assetMng->cb_ps_light.data.dynamicLightAttenuation_c = currentLevel->assetMng->light.attenuation_c;
-	currentLevel->assetMng->cb_ps_light.ApplyChanges();
-	_window->Gfx().deviceContext->PSSetConstantBuffers(0, 1, currentLevel->assetMng->cb_ps_light.GetAddressOf());
 	{
+		currentLevel->assetMng->light.SetConstantBuffers(&_window->Gfx());
 		currentLevel->assetMng->light.SetPosition(500.0f, 350.0f, 500.0f);
 		_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0);
 		currentLevel->assetMng->light.Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
@@ -109,8 +102,8 @@ void Genesis::ImGuiHandler()
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
 	ImGui::Text(fpsString.c_str());
-	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->cb_ps_light.data.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->cb_ps_light.data.ambientLightStrength, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->light.ambientLightColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->light.ambientLightStrength, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::NewLine();
 	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->light.lightColor.x, 0.01f, 0.0f, 10.0f);

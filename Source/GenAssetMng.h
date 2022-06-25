@@ -12,6 +12,7 @@
 #include "Shaders.h"
 #include "GenGraphics.h"
 #include "ConstantBuffer.h"
+#include "GenLight.h"
 using namespace std;
 
 class GenAssetMng
@@ -24,8 +25,7 @@ public:
 	map<std::string, VertexShader*> vertexShaders;
 	map<std::string, PixelShader*> pixelShaders;
 	ConstantBuffer<CB_VS_vertexshader_2d> cb_vs_vertexshader_2d;
-	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;
-	ConstantBuffer<CB_PS_light> cb_ps_light;
+	ConstantBuffer<CB_VS_vertexshader> cb_vs_vertexshader;	
 	GenCamera camera;
 	GenCamera2D camera2D;
 	GenSprite sprite;

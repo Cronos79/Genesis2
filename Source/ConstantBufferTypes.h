@@ -22,13 +22,16 @@ struct CB_VS_vertexshader_2d
 
 struct CB_PS_light
 {
-	DirectX::XMFLOAT3 ambientLightColor;
-	float ambientLightStrength;
-
 	DirectX::XMFLOAT3 dynamicLightColor;
 	float dynamicLightStrength;
 	DirectX::XMFLOAT3 dynamicLightPosition;
 	float dynamicLightAttenuation_a;
 	float dynamicLightAttenuation_b;
 	float dynamicLightAttenuation_c;
+};
+
+struct CB_PS_ambientlight
+{
+	DirectX::XMFLOAT3 ambientLightColor;
+	float ambientLightStrength;
 };

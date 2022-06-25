@@ -22,7 +22,7 @@
 #include "ImGUI\\imgui_impl_win32.h"
 #include "ImGUI\\imgui_impl_dx11.h"
 #include "GenGameObject.h"
-#include "GenLight.h"
+
 #include "GenCamera2D.h"
 #include "GenSprite.h"
 

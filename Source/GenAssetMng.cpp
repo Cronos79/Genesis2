@@ -120,13 +120,7 @@ bool GenAssetMng::InitializeConstantBuffers()
 		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize 2d constant buffer.");
 
 		hr = this->cb_vs_vertexshader.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get());
-		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-
-		hr = this->cb_ps_light.Initialize(Gfx->device.Get(), Gfx->deviceContext.Get());
-		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");
-
-		this->cb_ps_light.data.ambientLightColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
-		this->cb_ps_light.data.ambientLightStrength = 1.0f;		
+		GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");			
 	}
 	catch (GenException& exception)
 	{
