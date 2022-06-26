@@ -148,13 +148,24 @@ bool GenAssetMng::Test()
 bool GenAssetMng::LoadGameObject(std::string name)
 {
 	if (Gfx)
-	{		
-		loadedGameObjects3d[name] = new GenGameObject();
+	{
 		std::string delimiter = "_";
 		std::string token = name.substr(0, name.find(delimiter));
 		std::string path = ".\\Data\\" + token + ".fbx";
+		if (!loadedGameObjects3d[token])
+		{
+			loadedGameObjects3d[token] = new GenGameObject();
+			loadedGameObjects3d[token]->Initialize(path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader);
+		}
+		loadedGameObjects3d[name] = new GenGameObject();
+		if (loadedGameObjects3d[name]->GetModel() == nullptr)
+		{
+			if (loadedGameObjects3d[token]->GetModel() != nullptr)
+				loadedGameObjects3d[name]->SetModel(loadedGameObjects3d[token]->GetModel());
+		}
+		
 		if (!loadedGameObjects3d[name]->Initialize(path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
-			return false;
+			return false;			
 	}
 	else
 	{

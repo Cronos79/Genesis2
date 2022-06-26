@@ -8,8 +8,12 @@
 #include "GenGameObject.h"
 bool GenGameObject::Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader)
 {
-	if (!model.Initialize(filePath, device, deviceContext, cb_vs_vertexshader))
-		return false;
+	
+	if (model == nullptr)
+	{	
+		model = new GenModel();
+		model->Initialize(filePath, device, deviceContext, cb_vs_vertexshader);
+	}
 
 	this->SetPosition(0.0f, 0.0f, 0.0f);
 	this->SetRotation(0.0f, 0.0f, 0.0f);
@@ -17,9 +21,19 @@ bool GenGameObject::Initialize(const std::string& filePath, ID3D11Device* device
 	return true;
 }
 
+void GenGameObject::SetModel(GenModel* model)
+{
+	this->model = model;
+}
+
+GenModel* GenGameObject::GetModel()
+{
+	return model;
+}
+
 void GenGameObject::Draw(const XMMATRIX& viewProjectionMatrix)
 {
-	model.Draw(this->worldMatrix, viewProjectionMatrix);
+	model->Draw(this->worldMatrix, viewProjectionMatrix);
 }
 
 void GenGameObject::UpdateMatrix()

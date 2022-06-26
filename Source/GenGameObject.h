@@ -11,11 +11,13 @@ class GenGameObject : public GenGameObject3d
 {
 public:
 	bool Initialize(const std::string& filePath, ID3D11Device* device, ID3D11DeviceContext* deviceContext, ConstantBuffer<CB_VS_vertexshader>& cb_vs_vertexshader);
-
+	void SetModel(GenModel* model);
+	GenModel* GetModel();
 	void Draw(const XMMATRIX& viewProjectionMatrix);
-
+	bool modelLoaded = false;
 protected:
-	GenModel model;
+	GenModel* model;
+	
 	void UpdateMatrix() override;
 
 	XMMATRIX worldMatrix = XMMatrixIdentity();

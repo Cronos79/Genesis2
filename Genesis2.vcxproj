@@ -113,6 +113,7 @@
     <ClCompile Include="Source\GenPointLight.cpp" />
     <ClCompile Include="Source\GenSprite.cpp" />
     <ClCompile Include="Source\GenTexture.cpp" />
+    <ClCompile Include="Source\GenTile.cpp" />
     <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
     <ClCompile Include="Source\imgui\imgui.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Source\GenPointLight.h" />
     <ClInclude Include="Source\GenSprite.h" />
     <ClInclude Include="Source\GenTexture.h" />
+    <ClInclude Include="Source\GenTile.h" />
     <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
     <ClInclude Include="Source\GenWindow.h" />

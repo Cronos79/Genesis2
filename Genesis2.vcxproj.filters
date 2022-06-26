@@ -58,16 +58,22 @@
     <Filter Include="Source\Source Files\Game">
       <UniqueIdentifier>{dddfebc9-c9d2-4002-b8bb-27ea23300f47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Header Files\Game\World">
-      <UniqueIdentifier>{514158dc-46a9-4242-bbe9-7d8e1a0ce9c1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Header Files\Game\Assets">
       <UniqueIdentifier>{806ef18d-bb79-4e05-b537-cec010fe3482}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Source Files\Game\Assets">
       <UniqueIdentifier>{7e88ef0d-1333-49f6-8cb1-ddc85604d687}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Source Files\Game\World">
+    <Filter Include="Source\Source Files\Game\Assets\Lights">
+      <UniqueIdentifier>{be9e2068-d789-44c4-9c31-03b586d5bc09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Game\Assets\Lights">
+      <UniqueIdentifier>{97557c1b-a87f-48d4-872d-2217b0c8cb90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Header Files\Game\Assets\World">
+      <UniqueIdentifier>{514158dc-46a9-4242-bbe9-7d8e1a0ce9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game\Assets\World">
       <UniqueIdentifier>{2d622f44-2452-45d3-aacd-02abbbefb4bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -185,14 +191,17 @@
     <ClCompile Include="Source\GenAssetMng.cpp">
       <Filter>Source\Source Files\GameBase</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GenPointLight.cpp">
-      <Filter>Source\Source Files\Game\Assets</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GenLight.cpp">
       <Filter>Source\Source Files\GameBase</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenAmbientLight.cpp">
-      <Filter>Source\Source Files\Game\Assets</Filter>
+      <Filter>Source\Source Files\Game\Assets\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenPointLight.cpp">
+      <Filter>Source\Source Files\Game\Assets\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenTile.cpp">
+      <Filter>Source\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,14 +328,17 @@
     <ClInclude Include="Source\GenAssetMng.h">
       <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GenPointLight.h">
-      <Filter>Source\Header Files\Game\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GenLight.h">
       <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenAmbientLight.h">
-      <Filter>Source\Header Files\Game\Assets</Filter>
+      <Filter>Source\Header Files\Game\Assets\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenPointLight.h">
+      <Filter>Source\Header Files\Game\Assets\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenTile.h">
+      <Filter>Source\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
