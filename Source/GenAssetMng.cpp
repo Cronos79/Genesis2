@@ -145,26 +145,26 @@ bool GenAssetMng::Test()
 	camera.SetProjectionValues(90.0f, static_cast<float>(Gfx->windowWidth) / static_cast<float>(Gfx->windowHeight), 0.1f, 1000.0f);
 }
 
-bool GenAssetMng::LoadGameObject(std::string name)
+bool GenAssetMng::LoadTile(std::string name)
 {
 	if (Gfx)
 	{
 		std::string delimiter = "_";
 		std::string token = name.substr(0, name.find(delimiter));
 		std::string path = ".\\Data\\" + token + ".fbx";
-		if (!loadedGameObjects3d[token])
+		if (!loadedTiles[token])
 		{
-			loadedGameObjects3d[token] = new GenGameObject();
-			loadedGameObjects3d[token]->Initialize(path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader);
+			loadedTiles[token] = new GenTile();
+			loadedTiles[token]->Initialize(name, path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader);
 		}
-		loadedGameObjects3d[name] = new GenGameObject();
-		if (loadedGameObjects3d[name]->GetModel() == nullptr)
+		loadedTiles[name] = new GenTile();
+		if (loadedTiles[name]->GetModel() == nullptr)
 		{
-			if (loadedGameObjects3d[token]->GetModel() != nullptr)
-				loadedGameObjects3d[name]->SetModel(loadedGameObjects3d[token]->GetModel());
+			if (loadedTiles[token]->GetModel() != nullptr)
+				loadedTiles[name]->SetModel(loadedTiles[token]->GetModel());
 		}
 		
-		if (!loadedGameObjects3d[name]->Initialize(path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+		if (!loadedTiles[name]->Initialize(name, path, Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
 			return false;			
 	}
 	else
@@ -174,13 +174,13 @@ bool GenAssetMng::LoadGameObject(std::string name)
 	return true;
 }
 
-GenGameObject* GenAssetMng::GetGameObject(std::string name)
+GenTile* GenAssetMng::GetTile(std::string name)
 {
-	GenGameObject* temp = loadedGameObjects3d[name];
+	GenTile* temp = loadedTiles[name];
 	if (!temp)
 	{
-		LoadGameObject(name);
-		temp = loadedGameObjects3d[name];
+		LoadTile(name);
+		temp = loadedTiles[name];
 
 	}
 	return temp;

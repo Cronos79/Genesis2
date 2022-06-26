@@ -8,6 +8,7 @@
 #include "Genesis.h"
 #include "GenLogger.h"
 #include "GenTile.h"
+#include "GenChunk.h"
 
 Genesis::Genesis(GenWindow* window)
 {
@@ -20,36 +21,23 @@ void Genesis::Start()
 {
 	GenLogger::Info("Genesis starting");
 	currentLevel->LoadLevel("Test");
+	chunk = new GenChunk();
+	ClearGfx();
+	SetDefaultShaders();
+	chunk->InitChunk(currentLevel);
 }
 
 void Genesis::Update()
 {
 	float dt = DeltaTime->Mark() * 1000;
-	SetupGfx();	
-	InputHandler(dt);
+	ClearGfx();	
 	SetDefaultShaders();
+	InputHandler(dt);
 	
-	std::string name = "Cube_";
-	// Test object	
-	if (currentLevel->assetMng->assetsLoaded)
-	{
-		int counter = 0;
-		for (int y = 0; y <= 20; y++)
-		{
-			for (int x = 0; x <= 20; x++)
-			{
-				std::string name1 = name + std::to_string(counter++);
-				//GenGameObject* object = currentLevel->assetMng->GetGameObject(name1);
-				GenTile* object = (GenTile*)currentLevel->assetMng->GetGameObject(name1);
-				object->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
-				object->SetPosition(100.0f * x, 0.0f, 100.0f * y);
-			}
-		}				
-	}
+	
+	// Test chunk
+	chunk->DrawChunk();
 
-	GenTile* object = (GenTile*)currentLevel->assetMng->GetGameObject("Cube_0");
-	object->Test();
-	object->AdjustRotation(0.001f, 0.0f, 0.0f);
 	// PointLight
 	{
 		currentLevel->assetMng->GetPointLight("pl1")->SetConstantBuffers(&_window->Gfx());
@@ -76,7 +64,7 @@ void Genesis::SetDefaultShaders()
 	//_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState.Get(), 0); // depthStencilState_applyMask.Get()
 }
 
-void Genesis::SetupGfx()
+void Genesis::ClearGfx()
 {
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	_window->Gfx().deviceContext->ClearRenderTargetView(_window->Gfx().renderTargetView.Get(), bgcolor);
@@ -107,6 +95,8 @@ void Genesis::ImGuiHandler()
 	ImGui::NewFrame();
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
+	//GenTile* tile = chunk->GetTile("Cube_50");
+	//ImGui::Text(tile->test.c_str());
 	ImGui::Text(fpsString.c_str());
 	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->GetAmbientLight("al1")->ambientLightColor.x, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->GetAmbientLight("al1")->ambientLightStrength, 0.01f, 0.0f, 1.0f);

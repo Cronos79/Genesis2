@@ -16,6 +16,8 @@ public:
 	const XMVECTOR& GetRotationVector() const;
 	const XMFLOAT3& GetRotationFloat3() const;
 
+	void SetName(std::string name);
+	std::string GetName();
 	void SetPosition(const XMVECTOR& pos);
 	void SetPosition(const XMFLOAT3& pos);
 	void SetPosition(float x, float y, float z);
@@ -39,5 +41,6 @@ protected:
 	XMFLOAT3 rot;
 
 	XMFLOAT3 scale;
+	std::string ObjectName = "invalid";
 };
 

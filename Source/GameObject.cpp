@@ -27,6 +27,16 @@ const XMFLOAT3& GameObject::GetRotationFloat3() const
 	return this->rot;
 }
 
+void GameObject::SetName(std::string name)
+{
+	this->ObjectName = name;
+}
+
+std::string GameObject::GetName()
+{
+	return ObjectName;
+}
+
 void GameObject::SetPosition(const XMVECTOR& pos)
 {
 	XMStoreFloat3(&this->pos, pos);

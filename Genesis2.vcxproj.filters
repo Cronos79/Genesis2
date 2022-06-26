@@ -201,7 +201,10 @@
       <Filter>Source\Source Files\Game\Assets\Lights</Filter>
     </ClCompile>
     <ClCompile Include="Source\GenTile.cpp">
-      <Filter>Source\Source Files</Filter>
+      <Filter>Source\Source Files\Game\Assets\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenChunk.cpp">
+      <Filter>Source\Source Files\Game\Assets\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -338,7 +341,10 @@
       <Filter>Source\Header Files\Game\Assets\Lights</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenTile.h">
-      <Filter>Source\Header Files</Filter>
+      <Filter>Source\Header Files\Game\Assets\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenChunk.h">
+      <Filter>Source\Header Files\Game\Assets\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

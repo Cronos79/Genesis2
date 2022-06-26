@@ -9,6 +9,7 @@
 #include "GenTimer.h"
 #include "GenWindow.h"
 #include "GenLevel.h"
+#include "GenChunk.h"
 class Genesis
 {
 public:
@@ -20,10 +21,12 @@ public:
 private:
 	void InputHandler(float dt);
 	void ImGuiHandler();
-	void SetupGfx();
+	void ClearGfx();
 	void SetDefaultShaders();
 	GenTimer* DeltaTime;
 	GenWindow* _window;
 	GenLevel* currentLevel;
+
+	GenChunk* chunk;
 };
 

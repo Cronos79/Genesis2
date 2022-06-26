@@ -10,6 +10,6 @@
 class GenTile : public GenGameObject
 {
 public:
-	void Test();
+	std::string test = "default";
 };
 
