@@ -202,12 +202,12 @@ GenPointLight* GenAssetMng::GetPointLight(std::string name)
 	return temp;
 }
 
-bool GenAssetMng::LoadAmbibntLight(std::string name)
+bool GenAssetMng::LoadAmbientLight(std::string name)
 {
 	if (Gfx)
 	{
-		loadedAmbibntLights[name] = new GenAmbibntLight();;
-		if (!loadedAmbibntLights[name]->Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
+		loadedAmbientLights[name] = new GenAmbientLight();;
+		if (!loadedAmbientLights[name]->Initialize(Gfx->device.Get(), Gfx->deviceContext.Get(), this->cb_vs_vertexshader))
 			return false;
 	}
 	else
@@ -217,13 +217,13 @@ bool GenAssetMng::LoadAmbibntLight(std::string name)
 	return true;
 }
 
-GenAmbibntLight* GenAssetMng::GetAmbibntLight(std::string name)
+GenAmbientLight* GenAssetMng::GetAmbientLight(std::string name)
 {
-	GenAmbibntLight* temp = loadedAmbibntLights[name];
+	GenAmbientLight* temp = loadedAmbientLights[name];
 	if (!temp)
 	{
-		LoadAmbibntLight(name);
-		temp = loadedAmbibntLights[name];
+		LoadAmbientLight(name);
+		temp = loadedAmbientLights[name];
 	}
 	return temp;
 }

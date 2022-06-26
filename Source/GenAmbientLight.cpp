@@ -1,7 +1,7 @@
-#include "GenAmbibntLight.h"
+#include "GenAmbientLight.h"
 #include "GenMacros.h"
 
-void GenAmbibntLight::SetConstantBuffers(GenGraphics* gfx)
+void GenAmbientLight::SetConstantBuffers(GenGraphics* gfx)
 {
 	HRESULT hr = this->cb_ps_ambientlight.Initialize(gfx->device.Get(), gfx->deviceContext.Get());
 	GENWND_ERROR_IF_FAILED(hr, "Failed to initialize constant buffer.");

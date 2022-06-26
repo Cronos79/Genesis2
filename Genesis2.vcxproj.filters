@@ -191,7 +191,7 @@
     <ClCompile Include="Source\GenLight.cpp">
       <Filter>Source\Source Files\GameBase</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GenAmbibntLight.cpp">
+    <ClCompile Include="Source\GenAmbientLight.cpp">
       <Filter>Source\Source Files\Game\Assets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -325,7 +325,7 @@
     <ClInclude Include="Source\GenLight.h">
       <Filter>Source\Header Files\GameBase</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GenAmbibntLight.h">
+    <ClInclude Include="Source\GenAmbientLight.h">
       <Filter>Source\Header Files\Game\Assets</Filter>
     </ClInclude>
   </ItemGroup>

@@ -93,7 +93,7 @@
     <ClCompile Include="Source\AdapterReader.cpp" />
     <ClCompile Include="Source\FunctionLib.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
-    <ClCompile Include="Source\GenAmbibntLight.cpp" />
+    <ClCompile Include="Source\GenAmbientLight.cpp" />
     <ClCompile Include="Source\GenApp.cpp" />
     <ClCompile Include="Source\GenAssetMng.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
@@ -141,7 +141,7 @@
     <ClInclude Include="Source\ConstantBuffer.h" />
     <ClInclude Include="Source\ConstantBufferTypes.h" />
     <ClInclude Include="Source\GameObject.h" />
-    <ClInclude Include="Source\GenAmbibntLight.h" />
+    <ClInclude Include="Source\GenAmbientLight.h" />
     <ClInclude Include="Source\GenAssetMng.h" />
     <ClInclude Include="Source\GenCamera.h" />
     <ClInclude Include="Source\GenCamera2D.h" />

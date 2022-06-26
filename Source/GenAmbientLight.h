@@ -1,6 +1,6 @@
 #pragma once
 #include "GenLight.h"
-class GenAmbibntLight : public GenLight
+class GenAmbientLight : public GenLight
 {
 public:
 	void SetConstantBuffers(GenGraphics* gfx) override;

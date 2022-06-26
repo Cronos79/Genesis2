@@ -53,9 +53,8 @@ void Genesis::Update()
 	}
 	// Ambient light
 	{
-		currentLevel->assetMng->GetAmbibntLight("al1")->SetConstantBuffers(&_window->Gfx());
-		//currentLevel->assetMng->GetAmbibntLight("al1")->SetPosition(500.0f, 450.0f, 500.0f);
-		currentLevel->assetMng->GetAmbibntLight("al1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
+		currentLevel->assetMng->GetAmbientLight("al1")->SetConstantBuffers(&_window->Gfx());
+		currentLevel->assetMng->GetAmbientLight("al1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
 	}
 	//_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState_drawMask.Get(), 0);
 	//_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_2d"]->GetInputLayout());
@@ -104,8 +103,8 @@ void Genesis::ImGuiHandler()
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
 	ImGui::Text(fpsString.c_str());
-	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->GetAmbibntLight("al1")->ambientLightColor.x, 0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->GetAmbibntLight("al1")->ambientLightStrength, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->GetAmbientLight("al1")->ambientLightColor.x, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Ambient Light Strength", &currentLevel->assetMng->GetAmbientLight("al1")->ambientLightStrength, 0.01f, 0.0f, 1.0f);
 	//ImGui::DragFloat("Alpha", &alpha, 0.1f, 0.0f, 1.0f);
 	ImGui::NewLine();
 	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->GetPointLight("pl1")->lightColor.x, 0.01f, 0.0f, 10.0f);
