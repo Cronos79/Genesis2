@@ -6,20 +6,16 @@
    $Notice: (C) Copyright 2022 by CronoGames, Inc. All Rights Reserved. $
    ======================================================================== */
 #pragma once
-#include "GenAssetMng.h"
-#include <string>
-#include "GenWorld.h"
-class GenLevel
+#include "GenChunk.h"
+class GenWorld
 {
 public:
-	GenLevel(GenGraphics* gfx);
-	bool LoadLevel(std::string name);	
-	GenAssetMng* assetMng;
-	GenWorld* GetWorld();
-private:	
-	bool assestMngEnabled = false;
-	bool InitAssetMng(GenGraphics* gfx);
-	std::string levelName;
-	GenWorld* world;
+	GenWorld(class GenLevel* currentLevel);
+	void InitChunks(class GenLevel* currentLevel);
+	GenChunk* GetChunk(int x, int y);
+	void DrawWorld(class GenWindow* wnd, class GenLevel* currentLevel);
+private:
+	std::vector<GenChunk*> chunks;
+	GenChunk* chunk;
 };
 

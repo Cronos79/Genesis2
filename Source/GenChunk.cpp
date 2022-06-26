@@ -1,4 +1,5 @@
 #include "GenChunk.h"
+#include "GenLevel.h"
 
 void GenChunk::InitChunk(GenLevel* currentLevel)
 {

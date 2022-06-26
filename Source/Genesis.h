@@ -9,7 +9,6 @@
 #include "GenTimer.h"
 #include "GenWindow.h"
 #include "GenLevel.h"
-#include "GenChunk.h"
 class Genesis
 {
 public:
@@ -27,6 +26,6 @@ private:
 	GenWindow* _window;
 	GenLevel* currentLevel;
 
-	GenChunk* chunk;
+	
 };
 

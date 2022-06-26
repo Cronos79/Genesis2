@@ -20,3 +20,9 @@ d3d11.lib
 DXGI.lib
 d3d11.lib
 d3dcompiler.lib
+
+//_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState_drawMask.Get(), 0);
+	//_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_2d"]->GetInputLayout());
+	//_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0); // pixelshader_2d.GetShader()
+	//_window->Gfx().deviceContext->VSSetShader(currentLevel->assetMng->vertexShaders["vs_2d"]->GetShader(), NULL, 0);
+	//currentLevel->assetMng->sprite.Draw(currentLevel->assetMng->camera2D.GetWorldMatrix() * currentLevel->assetMng->camera2D.GetOrthoMatrix());

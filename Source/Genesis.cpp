@@ -7,8 +7,6 @@
    ======================================================================== */
 #include "Genesis.h"
 #include "GenLogger.h"
-#include "GenTile.h"
-#include "GenChunk.h"
 
 Genesis::Genesis(GenWindow* window)
 {
@@ -19,12 +17,10 @@ Genesis::Genesis(GenWindow* window)
 
 void Genesis::Start()
 {
-	GenLogger::Info("Genesis starting");
-	currentLevel->LoadLevel("Test");
-	chunk = new GenChunk();
 	ClearGfx();
 	SetDefaultShaders();
-	chunk->InitChunk(currentLevel);
+	GenLogger::Info("Genesis starting");
+	currentLevel->LoadLevel("Test");	
 }
 
 void Genesis::Update()
@@ -32,28 +28,11 @@ void Genesis::Update()
 	float dt = DeltaTime->Mark() * 1000;
 	ClearGfx();	
 	SetDefaultShaders();
-	InputHandler(dt);
-	
-	
-	// Test chunk
-	chunk->DrawChunk();
+	InputHandler(dt);		
 
-	// PointLight
-	{
-		currentLevel->assetMng->GetPointLight("pl1")->SetConstantBuffers(&_window->Gfx());
-		currentLevel->assetMng->GetPointLight("pl1")->SetPosition(500.0f, 350.0f, 500.0f);
-		currentLevel->assetMng->GetPointLight("pl1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
-	}
-	// Ambient light
-	{
-		currentLevel->assetMng->GetAmbientLight("al1")->SetConstantBuffers(&_window->Gfx());
-		currentLevel->assetMng->GetAmbientLight("al1")->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
-	}
-	//_window->Gfx().deviceContext->OMSetDepthStencilState(_window->Gfx().depthStencilState_drawMask.Get(), 0);
-	//_window->Gfx().deviceContext->IASetInputLayout(currentLevel->assetMng->vertexShaders["vs_2d"]->GetInputLayout());
-	//_window->Gfx().deviceContext->PSSetShader(currentLevel->assetMng->pixelShaders["ps_2d"]->GetShader(), NULL, 0); // pixelshader_2d.GetShader()
-	//_window->Gfx().deviceContext->VSSetShader(currentLevel->assetMng->vertexShaders["vs_2d"]->GetShader(), NULL, 0);
-	//currentLevel->assetMng->sprite.Draw(currentLevel->assetMng->camera2D.GetWorldMatrix() * currentLevel->assetMng->camera2D.GetOrthoMatrix());
+	// DrawWorld
+	SetDefaultShaders();
+	currentLevel->GetWorld()->DrawWorld(_window, currentLevel);
 }
 
 void Genesis::SetDefaultShaders()
@@ -95,7 +74,7 @@ void Genesis::ImGuiHandler()
 	ImGui::NewFrame();
 	//Create ImGui Test Window
 	ImGui::Begin("App info");
-	//GenTile* tile = chunk->GetTile("Cube_50");
+	//GenTile* tile = currentLevel->GetWorld()->chunk->   //GetTile("Cube_50");
 	//ImGui::Text(tile->test.c_str());
 	ImGui::Text(fpsString.c_str());
 	ImGui::DragFloat3("Ambient Light Color", &currentLevel->assetMng->GetAmbientLight("al1")->ambientLightColor.x, 0.01f, 0.0f, 1.0f);

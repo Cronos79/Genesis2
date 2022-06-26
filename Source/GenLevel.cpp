@@ -17,7 +17,14 @@ GenLevel::GenLevel(GenGraphics* gfx)
 
 bool GenLevel::LoadLevel(std::string name)
 {
+	this->levelName = name;
+	world = new GenWorld(this); // #TODO: load world from name.
 	return true;
+}
+
+GenWorld* GenLevel::GetWorld()
+{
+	return world;
 }
 
 bool GenLevel::InitAssetMng(GenGraphics* gfx)

@@ -206,6 +206,9 @@
     <ClCompile Include="Source\GenChunk.cpp">
       <Filter>Source\Source Files\Game\Assets\World</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GenWorld.cpp">
+      <Filter>Source\Source Files\Game\Assets\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\GenApp.h">
@@ -344,6 +347,9 @@
       <Filter>Source\Header Files\Game\Assets\World</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenChunk.h">
+      <Filter>Source\Header Files\Game\Assets\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenWorld.h">
       <Filter>Source\Header Files\Game\Assets\World</Filter>
     </ClInclude>
   </ItemGroup>

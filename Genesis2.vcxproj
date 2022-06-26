@@ -117,6 +117,7 @@
     <ClCompile Include="Source\GenTile.cpp" />
     <ClCompile Include="Source\GenTimer.cpp" />
     <ClCompile Include="Source\GenWindow.cpp" />
+    <ClCompile Include="Source\GenWorld.cpp" />
     <ClCompile Include="Source\imgui\imgui.cpp" />
     <ClCompile Include="Source\imgui\imgui_draw.cpp" />
     <ClCompile Include="Source\imgui\imgui_impl_dx11.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Source\GenTimer.h" />
     <ClInclude Include="Source\GenWin.h" />
     <ClInclude Include="Source\GenWindow.h" />
+    <ClInclude Include="Source\GenWorld.h" />
     <ClInclude Include="Source\imgui\imconfig.h" />
     <ClInclude Include="Source\imgui\imgui.h" />
     <ClInclude Include="Source\imgui\imgui_impl_dx11.h" />
