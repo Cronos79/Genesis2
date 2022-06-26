@@ -21,6 +21,10 @@ void Genesis::Start()
 	SetDefaultShaders();
 	GenLogger::Info("Genesis starting");
 	currentLevel->LoadLevel("Test");	
+	hero = new GenHero();
+	std::string path = ".\\Data\\Cube.fbx";
+	hero->Initialize("Cube", path, _window->Gfx().device.Get(), _window->Gfx().deviceContext.Get(), currentLevel->assetMng->cb_vs_vertexshader);
+	hero->SetPosition(100.0f, 150.0f, 100.0f);
 }
 
 void Genesis::Update()
@@ -29,6 +33,12 @@ void Genesis::Update()
 	ClearGfx();	
 	SetDefaultShaders();
 	InputHandler(dt);		
+
+	// Test code
+	
+	
+	
+	hero->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
 
 	// DrawWorld
 	SetDefaultShaders();
@@ -86,6 +96,12 @@ void Genesis::ImGuiHandler()
 	ImGui::DragFloat("Dynamic Light Attenuation A", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_a, 0.01f, 0.1f, 10.0f);
 	ImGui::DragFloat("Dynamic Light Attenuation B", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_b, 0.01f, 0.0f, 10.0f);
 	ImGui::DragFloat("Dynamic Light Attenuation C", &currentLevel->assetMng->GetPointLight("pl1")->attenuation_c, 0.01f, 0.0f, 10.0f);
+
+	ImGui::DragFloat3("Dynamic Light Color", &currentLevel->assetMng->GetPointLight("pl2")->lightColor.x, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Strength", &currentLevel->assetMng->GetPointLight("pl2")->lightStrength, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation A", &currentLevel->assetMng->GetPointLight("pl2")->attenuation_a, 0.01f, 0.1f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation B", &currentLevel->assetMng->GetPointLight("pl2")->attenuation_b, 0.01f, 0.0f, 10.0f);
+	ImGui::DragFloat("Dynamic Light Attenuation C", &currentLevel->assetMng->GetPointLight("pl2")->attenuation_c, 0.01f, 0.0f, 10.0f);
 	ImGui::End();
 	//Assemble Together Draw Data
 	ImGui::Render();
@@ -166,13 +182,23 @@ void Genesis::InputHandler(float dt)
 
 	if (upDown)
 	{
-		currentLevel->assetMng->camera.AdjustPosition(currentLevel->assetMng->camera.GetForwardVector() * cameraSpeed * dt);
+		
+		hero->AdjustPosition(hero->GetForwardVector() * 1.0f * dt);	
 	}
-	if (_window->kbd.KeyIsPressed('C'))
+	if (downDown)
 	{
-		XMVECTOR lightPosition = currentLevel->assetMng->camera.GetPositionVector();
-		lightPosition += currentLevel->assetMng->camera.GetForwardVector();
-		currentLevel->assetMng->GetPointLight("pl1")->SetPosition(lightPosition);
-		currentLevel->assetMng->GetPointLight("pl1")->SetRotation(currentLevel->assetMng->camera.GetRotationFloat3());
+
+		hero->AdjustPosition(hero->GetBackwardVector() * 1.0f * dt);		
 	}
+	if (leftDown)
+	{
+
+		hero->AdjustPosition(hero->GetLeftVector() * 1.0f * dt);
+	}
+	if (rightDown)
+	{
+
+		hero->AdjustPosition(hero->GetRightVector() * 1.0f * dt);
+	}
+	currentLevel->assetMng->camera.SetPosition(hero->GetPositionFloat3().x, hero->GetPositionFloat3().y + 350.0f, hero->GetPositionFloat3().z - 250.0f);
 }

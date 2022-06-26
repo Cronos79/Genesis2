@@ -76,6 +76,12 @@
     <Filter Include="Source\Source Files\Game\Assets\World">
       <UniqueIdentifier>{2d622f44-2452-45d3-aacd-02abbbefb4bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Header Files\Game\Assets\Characters">
+      <UniqueIdentifier>{ec6d84b1-25a0-4f1e-81f9-4b0b56155405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Source Files\Game\Assets\Characters">
+      <UniqueIdentifier>{39642c77-c799-4a31-ba17-55d12fcfe33a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Misc\TODO.txt">
@@ -208,6 +214,12 @@
     </ClCompile>
     <ClCompile Include="Source\GenWorld.cpp">
       <Filter>Source\Source Files\Game\Assets\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenCharacter.cpp">
+      <Filter>Source\Source Files\GameBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GenHero.cpp">
+      <Filter>Source\Source Files\Game\Assets\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +363,12 @@
     </ClInclude>
     <ClInclude Include="Source\GenWorld.h">
       <Filter>Source\Header Files\Game\Assets\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenCharacter.h">
+      <Filter>Source\Header Files\GameBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GenHero.h">
+      <Filter>Source\Header Files\Game\Assets\Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

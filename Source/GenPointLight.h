@@ -18,5 +18,8 @@ public:
 	float attenuation_b = 0.1f;
 	float attenuation_c = 0.1f;
 	ConstantBuffer<CB_PS_light> cb_ps_light;
+protected:
+	void UpdateMatrix() override;
+
 };
 

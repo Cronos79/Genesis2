@@ -98,6 +98,7 @@
     <ClCompile Include="Source\GenAssetMng.cpp" />
     <ClCompile Include="Source\GenCamera.cpp" />
     <ClCompile Include="Source\GenCamera2D.cpp" />
+    <ClCompile Include="Source\GenCharacter.cpp" />
     <ClCompile Include="Source\GenChunk.cpp" />
     <ClCompile Include="Source\GenColor.cpp" />
     <ClCompile Include="Source\Genesis.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Source\GenGameObject2d.cpp" />
     <ClCompile Include="Source\GenGameObject3d.cpp" />
     <ClCompile Include="Source\GenGraphics.cpp" />
+    <ClCompile Include="Source\GenHero.cpp" />
     <ClCompile Include="Source\GenLevel.cpp" />
     <ClCompile Include="Source\GenLight.cpp" />
     <ClCompile Include="Source\GenLogger.cpp" />
@@ -148,6 +150,7 @@
     <ClInclude Include="Source\GenAssetMng.h" />
     <ClInclude Include="Source\GenCamera.h" />
     <ClInclude Include="Source\GenCamera2D.h" />
+    <ClInclude Include="Source\GenCharacter.h" />
     <ClInclude Include="Source\GenChunk.h" />
     <ClInclude Include="Source\GenColor.h" />
     <ClInclude Include="Source\Genesis.h" />
@@ -155,6 +158,7 @@
     <ClInclude Include="Source\GenGameObject2d.h" />
     <ClInclude Include="Source\GenGameObject3d.h" />
     <ClInclude Include="Source\GenGraphics.h" />
+    <ClInclude Include="Source\GenHero.h" />
     <ClInclude Include="Source\GenLevel.h" />
     <ClInclude Include="Source\GenLight.h" />
     <ClInclude Include="Source\GenMacros.h" />

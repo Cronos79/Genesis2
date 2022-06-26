@@ -16,6 +16,7 @@
 #include "GenPointLight.h"
 #include "GenAmbientLight.h"
 #include "GenTile.h"
+#include "GenHero.h"
 using namespace std;
 
 class GenAssetMng
@@ -36,6 +37,7 @@ public:
 	GenCamera camera;
 	GenCamera2D camera2D;
 	GenSprite sprite;
+	GenHero* hero;
 	bool assetsLoaded = false;
 private:
 	bool InitializeShaders();

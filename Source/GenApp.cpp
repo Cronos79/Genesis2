@@ -10,7 +10,7 @@
 
 GenApp::GenApp()
 	:
-	wnd(800, 600, "Genesis2")
+	wnd(1920, 1080, "Genesis2")
 {
 	wnd.SetTitle("Genesis");
 	wnd.kbd.DisableAutorepeat();

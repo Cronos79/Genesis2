@@ -16,6 +16,5 @@ public:
 	void DrawWorld(class GenWindow* wnd, class GenLevel* currentLevel);
 private:
 	std::vector<GenChunk*> chunks;
-	GenChunk* chunk;
 };
 

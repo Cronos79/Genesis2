@@ -21,3 +21,9 @@ void GenPointLight::SetConstantBuffers(GenGraphics* gfx)
 	cb_ps_light.ApplyChanges();
 	gfx->deviceContext->PSSetConstantBuffers(0, 2, cb_ps_light.GetAddressOf());
 }
+
+void GenPointLight::UpdateMatrix()
+{
+	this->worldMatrix = XMMatrixRotationRollPitchYaw(this->rot.x, this->rot.y, this->rot.z) * XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+	this->UpdateDirectionVectors();
+}
