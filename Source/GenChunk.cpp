@@ -4,7 +4,7 @@
 void GenChunk::InitChunk(GenLevel* currentLevel)
 {
 	this->currentLevel = currentLevel;
-	std::string name = "Cube_";
+	std::string name = "Tile_";
 	if (currentLevel->assetMng->assetsLoaded)
 	{
 		int counter = 0;
@@ -32,7 +32,7 @@ void GenChunk::DrawChunk()
 {
 	for (auto t : tiles)
 	{
-		t->SetPosition(GetPositionFloat3().x + t->GetSize() * t->x, 0.0f, t->GetSize() * t->y);
+		t->SetPosition(GetPositionFloat3().x + t->GetSize() * t->x, 0.0f, GetPositionFloat3().y + t->GetSize() * t->y);
 		DrawTile(t);
 	}
 }

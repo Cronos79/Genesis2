@@ -16,7 +16,8 @@ void GenWorld::InitChunks(GenLevel* currentLevel)
 		{
 			chunks.push_back(new GenChunk());
 			chunks[count]->InitChunk(currentLevel);
-			chunks[count]->SetPosition(x * (float)chunks[count]->GetChunkWidth(), 0.0f, y * (float)chunks[count]->GetChunkWidth());
+			chunks[count]->SetPosition(x * (float)chunks[count]->GetChunkWidth(), 0.0f, y * (float)chunks[count]->GetChunkHeight());
+			//chunks[count]->SetPosition(x * (float)chunks[count]->GetChunkWidth(), y * (float)chunks[count]->GetChunkHeight(), 0.0f);
 			count++;
 		}
 	}

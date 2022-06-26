@@ -21,10 +21,11 @@ void Genesis::Start()
 	SetDefaultShaders();
 	GenLogger::Info("Genesis starting");
 	currentLevel->LoadLevel("Test");	
-	hero = new GenHero();
+	hero = new GenHero(currentLevel);
 	std::string path = ".\\Data\\Cube.fbx";
 	hero->Initialize("Cube", path, _window->Gfx().device.Get(), _window->Gfx().deviceContext.Get(), currentLevel->assetMng->cb_vs_vertexshader);
 	hero->SetPosition(100.0f, 150.0f, 100.0f);
+	currentLevel->assetMng->GetPointLight("HeroLight")->Initialize(_window->Gfx().device.Get(), _window->Gfx().deviceContext.Get(), currentLevel->assetMng->cb_vs_vertexshader);
 }
 
 void Genesis::Update()
@@ -36,8 +37,14 @@ void Genesis::Update()
 
 	// Test code
 	
-	
-	
+	currentLevel->assetMng->GetPointLight("HeroLight")->SetConstantBuffers(&_window->Gfx());
+	currentLevel->assetMng->GetPointLight("HeroLight")->lightColor = DirectX::XMFLOAT3(0.0f, 0.25f, 1.0f);
+	currentLevel->assetMng->GetPointLight("HeroLight")->lightStrength = 10.0f;
+	currentLevel->assetMng->GetPointLight("HeroLight")->attenuation_a = 1.0f;
+	currentLevel->assetMng->GetPointLight("HeroLight")->attenuation_b = 0.0f;
+	currentLevel->assetMng->GetPointLight("HeroLight")->attenuation_c = 0.0f;
+	currentLevel->assetMng->GetPointLight("HeroLight")->SetPosition(hero->GetPositionFloat3().x + 110.0f, hero->GetPositionFloat3().y + 110.0f, hero->GetPositionFloat3().z);
+	hero->DrawLight(_window, currentLevel);
 	hero->Draw(currentLevel->assetMng->camera.GetViewMatrix() * currentLevel->assetMng->camera.GetProjectionMatrix());
 
 	// DrawWorld
